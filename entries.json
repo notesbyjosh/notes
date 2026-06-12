@@ -1,0 +1,20 @@
+[
+  {
+    "date": "2026-06-12",
+    "title": "Started my AI learning log",
+    "body": "Set up a minimalist GitHub Pages site to track what I learn on my AI journey. Each entry is just an object in `entries.json` — `date`, `title`, `body`, and `tags`. The page renders them newest-first with **tag filtering** and search.\n\nNo build step, no framework — just `index.html`, `style.css`, and `app.js`.",
+    "tags": ["meta", "github-pages"]
+  },
+  {
+    "date": "2026-06-11",
+    "title": "RAG works best when chunks have context",
+    "body": "Learned that naive fixed-size chunking hurts retrieval quality. Adding a short summary or the document title to each chunk (\"contextual retrieval\") noticeably improved how often the right passage came back. Embeddings care about *meaning*, so giving each chunk a bit of surrounding context goes a long way.",
+    "tags": ["rag", "embeddings"]
+  },
+  {
+    "date": "2026-06-09",
+    "title": "Temperature isn't the only knob",
+    "body": "Beyond `temperature`, `top_p` (nucleus sampling) often gives more predictable control over output diversity. Rule of thumb I'm adopting: tune *one* of them, not both. For factual tasks I keep temperature low; for brainstorming I raise it.",
+    "tags": ["llm", "prompting"]
+  }
+]

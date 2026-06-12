@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Learning Log</title>
+  <meta name="description" content="A running log of things I learn on my AI journey." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234f46e5'/%3E%3Cpath d='M9 22V10h2.4l3.1 7.6L17.6 10H20v12h-2.1v-7.8l-2.7 6.4h-1.4l-2.7-6.4V22z' fill='%23fff'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="masthead">
+      <h1>AI Learning Log</h1>
+      <p class="tagline">Notes, lessons, and small wins from my AI journey.</p>
+      <div class="controls">
+        <input id="search" type="search" placeholder="Search learnings…" aria-label="Search learnings" autocomplete="off" />
+        <button id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle theme">◐</button>
+      </div>
+      <nav id="tagbar" class="tagbar" aria-label="Filter by tag"></nav>
+    </header>
+
+    <section id="stats" class="stats" aria-live="polite"></section>
+
+    <section id="timeline" class="timeline"></section>
+
+    <p id="empty" class="empty" hidden>No learnings match your filter.</p>
+
+    <footer class="footer">
+      <span id="count"></span>
+      <span class="sep">·</span>
+      <span>Built as a static site · hosted on GitHub Pages</span>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
