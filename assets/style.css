@@ -255,3 +255,19 @@ h1 a { color: inherit; text-decoration: none; }
   h1 { font-size: 1.6rem; }
   .stats { gap: 20px; }
 }
+
+/* Figures / images */
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.entry-body figure { margin: 24px 0; }
+.entry-body figcaption {
+  margin-top: 8px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-align: center;
+}
