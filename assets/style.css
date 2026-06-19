@@ -69,6 +69,20 @@ body {
   border-radius: 50%;
   display: block;
 }
+
+/* Logo swaps with the theme. Default (no explicit theme) follows the OS. */
+.logo-dark { display: none; }
+.logo-light { display: block; }
+@media (prefers-color-scheme: dark) {
+  .logo-light { display: none; }
+  .logo-dark { display: block; }
+}
+/* Explicit user toggle always wins over the OS preference. */
+[data-theme="light"] .logo-light { display: block; }
+[data-theme="light"] .logo-dark { display: none; }
+[data-theme="dark"] .logo-light { display: none; }
+[data-theme="dark"] .logo-dark { display: block; }
+
 @media (max-width: 540px) {
   .logo { width: 96px; height: 96px; }
 }

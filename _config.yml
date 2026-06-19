@@ -1,7 +1,7 @@
-title: AI Learning Log
-description: Notes, lessons, and small wins from my AI journey.
-url: "https://fizzmo.github.io"
-baseurl: "/ai-learning-log"
+title: Notes by Josh
+description: Notes and learning from Azure, Fabric and AI
+url: "https://notesbyjosh.github.io"
+baseurl: "/notes"
 
 markdown: kramdown
 permalink: /learnings/:title/
