@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{ page.title | default: site.title }}</title>
   <meta name="description" content="{{ page.description | default: site.description }}" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234f46e5'/%3E%3Cpath d='M9 22V10h2.4l3.1 7.6L17.6 10H20v12h-2.1v-7.8l-2.7 6.4h-1.4l-2.7-6.4V22z' fill='%23fff'/%3E%3C/svg%3E" />
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ '/assets/favicon-32.png' | relative_url }}" />
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/favicon-180.png' | relative_url }}" />
   <script>
     // Default to dark mode; honor a previously saved choice. Runs before paint to avoid a flash.
     (function () {
