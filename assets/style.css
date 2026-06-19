@@ -58,6 +58,21 @@ body {
 /* Masthead */
 .masthead { margin-bottom: 40px; }
 
+.logo-link {
+  display: inline-block;
+  line-height: 0;
+  margin-bottom: 14px;
+}
+.logo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: block;
+}
+@media (max-width: 540px) {
+  .logo { width: 96px; height: 96px; }
+}
+
 h1 {
   font-size: 1.9rem;
   font-weight: 680;
