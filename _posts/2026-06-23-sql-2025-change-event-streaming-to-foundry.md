@@ -45,6 +45,41 @@ The flow has four stages:
 4. **A hosted page.** The recommendation is posted to a small FastAPI application on
    Azure Container Apps, which renders a live, auto-refreshing list of shipping updates.
 
+## Serializing the change, and why the registry matters
+
+To leave the database, each change has to be **serialized** — the in-memory row is packed
+into a flat sequence of bytes that can travel through Event Hubs. The consumer then
+**deserializes** those bytes back into an object. CES can serialize each CloudEvent as
+**JSON** (self-describing text, where the field names travel alongside the values) or as
+**Avro binary** (compact, values only — *not* self-describing).
+
+That distinction is the entire reason a schema registry exists. Avro binary carries no
+field names, so a consumer cannot interpret the bytes without the schema that says which
+value is which. The registry is where that schema lives.
+
+### Schema evolution when one side lags
+
+A registry earns its keep when the producer and consumer evolve on different timelines —
+for example, a column is added to the orders table today, but the subscriber cannot be
+updated until next month. Whether that is safe depends on the **compatibility direction**
+configured on the registry:
+
+- **Backward** — a consumer on the new schema can read old data (upgrade consumers first).
+- **Forward** — a consumer on the old schema can read new data (upgrade producers first).
+- **Full** — both.
+
+The "add a column now, update the subscriber later" case is a producer-first change, so it
+calls for **Forward** or **Full** compatibility. Adding a **nullable column with a default**
+is safe in both directions: an old consumer simply ignores the new field. The registry's
+real value is as a **gate** — it rejects a breaking change, such as dropping a column or
+changing a type, before it ever reaches a lagging subscriber.
+
+One honest caveat for this design: CES does not automatically publish to or read from the
+Event Hubs Schema Registry. It embeds its own schema inline in each CloudEvent. In this
+proof of concept the registry is a contract that the consumer registers and validates
+against — and the highest-value way to use it is as a compatibility gate in a deployment
+pipeline.
+
 ## The architectural detail that matters most
 
 A local database cannot be reached from Azure. There is no inbound path into a laptop,
@@ -72,6 +107,21 @@ Event Hubs and the Foundry account. That produced two failures worth noting:
 - **Foundry rejected API keys.** Because Foundry is a cloud resource, the cleaner fix
   applied: **Microsoft Entra authentication** with a token credential, which is the
   recommended production pattern regardless.
+
+## A few implementation notes
+
+- **The AI step is a direct model call, not an agent.** The consumer makes a single,
+  stateless chat-completion request to the gpt-5.4 deployment. There is no agent, thread,
+  or tool loop — which keeps the path simple and avoids the orchestration failure modes
+  that managed agents can introduce. An agent is the right tool only when the model needs
+  to call tools or retrieve data; for example, to ground the new ship date on real
+  lead-time data rather than inventing it.
+- **CES is table-based.** A stream group tracks whole tables, not arbitrary column lists;
+  the only knobs are whether to include all columns and the before-image. To change what
+  is streamed, alter the table.
+- **A nightly policy reset.** The governance policy re-disables local authentication on the
+  Event Hubs namespace overnight, so the SAS fix has to be re-applied each morning — a small
+  operational reality of running a preview feature inside a governed subscription.
 
 ## Result
 
