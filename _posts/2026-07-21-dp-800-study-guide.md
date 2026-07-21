@@ -1,33 +1,32 @@
 ---
 layout: post
-title: "Studying for DP-800: Developing AI-Enabled Database Solutions"
-tags: [sql-server, azure-sql, fabric, ai, certification, dp-800, vectors, rag, mcp]
+title: "DP-800 study guide: Developing AI-Enabled Database Solutions"
+tags: [sql-server, azure-sql, fabric, ai, certification, dp-800, vectors, vector-search, rag, mcp, embeddings, dab]
 ---
 
-I spend a lot of my time these days putting AI on top of SQL — MCP servers over
-AdventureWorks, embeddings, RAG pipelines — so when I saw **Exam DP-800: Developing
-AI-Enabled Database Solutions** I knew it was the cert with my name on it. It's the
-first SQL certification where **AI is a weighted, first-class domain** rather than a
-footnote, and it spans the whole modern SQL family: **SQL Server, Azure SQL, and SQL
-database in Microsoft Fabric**. This post is my study plan, the full objective
-breakdown, the AI features I most want to pull out, and a vocabulary list — partly to
-share, partly because writing it out is how I learn.
+This is my working study guide for **Exam DP-800: Developing AI-Enabled Database
+Solutions** — the first SQL certification where **AI is a weighted, first-class
+domain** rather than a footnote. It spans the whole modern SQL family — **SQL Server,
+Azure SQL, and SQL database in Microsoft Fabric** — and assumes you can not only write
+T-SQL but also wire up **embeddings, vector search, and RAG *inside the database***.
+I'm keeping it here as a single reference I can revise as I work through each objective.
 
 ## Exam at a glance
 
 | Item | Detail |
 | --- | --- |
 | Certification | Microsoft Certified: Developing AI-Enabled Database Solutions |
+| Exam | DP-800 |
 | Passing score | **700 / 1000** |
 | Primary language | T-SQL |
 | Platforms | SQL Server, Azure SQL, SQL database in Microsoft Fabric |
 | Scope | Mostly GA features; commonly used Preview features may appear |
 | Skills version | As of March 12, 2026 |
 
-The audience profile is a developer who writes T-SQL and builds databases, and who is
-now expected to be fluent in **embeddings, vectors, and models** — integrating AI into
-real, scalable applications. That's the headline: this is a database-developer exam that
-assumes you can also wire up RAG and semantic search *inside the database*.
+The audience profile is a developer who writes T-SQL and builds databases and who is now
+expected to be fluent in **embeddings, vectors, and models**. In one line: it's a
+database-developer exam that assumes you can also build semantic search and RAG *without
+leaving SQL*.
 
 ## Skills measured &amp; weighting
 
@@ -38,7 +37,8 @@ assumes you can also wire up RAG and semantic search *inside the database*.
 | 3. **Implement AI capabilities in database solutions** | **25–30%** |
 
 Domains 1 and 2 are the bread-and-butter T-SQL and ops work; Domain 3 is the
-differentiator and where I'm spending the most *new* learning time.
+differentiator and where I spend the most *new* study time. Below is the full objective
+breakdown, then the AI features worth knowing cold, a study plan, and a vocabulary list.
 
 ## Domain 1 — Design &amp; develop (35–40%)
 
@@ -48,20 +48,20 @@ differentiator and where I'm spending the most *new* learning time.
   `SEQUENCES`; and table/index **partitioning**.
 - **Programmability:** views, scalar functions, table-valued functions, stored procedures,
   and triggers.
-- **Advanced T-SQL — the new stuff I need cold:** CTEs and window functions; **JSON
-  functions** (`JSON_OBJECT`, `JSON_ARRAY`, `JSON_ARRAYAGG`, `JSON_CONTAINS`, `OPENJSON`,
-  `JSON_VALUE`); **regular expressions** (`REGEXP_LIKE`, `REGEXP_REPLACE`, `REGEXP_SUBSTR`,
-  `REGEXP_INSTR`, `REGEXP_COUNT`, `REGEXP_MATCHES`, `REGEXP_SPLIT_TO_TABLE`); **fuzzy
-  matching** (`EDIT_DISTANCE`, `EDIT_DISTANCE_SIMILARITY`, `JARO_WINKLER_DISTANCE`); graph
-  queries with the **`MATCH`** operator; correlated queries; and error handling.
+- **Advanced T-SQL:** CTEs and window functions; **JSON functions** (`JSON_OBJECT`,
+  `JSON_ARRAY`, `JSON_ARRAYAGG`, `JSON_CONTAINS`, `OPENJSON`, `JSON_VALUE`); **regular
+  expressions** (`REGEXP_LIKE`, `REGEXP_REPLACE`, `REGEXP_SUBSTR`, `REGEXP_INSTR`,
+  `REGEXP_COUNT`, `REGEXP_MATCHES`, `REGEXP_SPLIT_TO_TABLE`); **fuzzy matching**
+  (`EDIT_DISTANCE`, `EDIT_DISTANCE_SIMILARITY`, `JARO_WINKLER_DISTANCE`); graph queries with
+  the **`MATCH`** operator; correlated queries; and error handling.
 - **🔑 AI-assisted development:** interpret the **security impact** of AI-assisted tools;
   enable **GitHub Copilot** and **Microsoft Copilot in Fabric**; configure **model and MCP
   (Model Context Protocol) tool options** in a Copilot chat session; create **Copilot
   instruction files**; and connect to **MCP server endpoints** — including **SQL Server**
   and **Fabric lakehouse**.
 
-That last bullet is the one that surprised me in a good way: knowing how to point Copilot
-at a **SQL Server MCP endpoint** is now an exam objective, not just a party trick.
+Pointing Copilot at a **SQL Server MCP endpoint** is now an exam objective, not just a
+party trick.
 
 ## Domain 2 — Secure, optimize &amp; deploy (35–40%)
 
@@ -82,12 +82,12 @@ at a **SQL Server MCP endpoint** is now an exam objective, not just a party tric
   via **CDC, Change Tracking, change event streaming (CES)**, Azure Functions SQL trigger
   binding, or Logic Apps.
 
-I've already built a DAB SQL MCP server for AdventureWorks, so this domain feels like home
-turf — but the **securing MCP/REST/GraphQL endpoints** angle is worth a careful pass.
+If you've built a DAB SQL MCP server before, this domain is home turf — but give the
+**securing MCP/REST/GraphQL endpoints** angle a careful pass.
 
 ## Domain 3 — 🔑 Implement AI capabilities (25–30%)
 
-This is the heart of the cert. Three sub-areas:
+The heart of the cert, in three sub-areas.
 
 **Models &amp; embeddings.** Evaluate **external models** (multimodal, multilanguage, size,
 **structured output**); create and manage external models; choose an **embedding
@@ -106,11 +106,11 @@ measure search performance.
 **`sp_invoke_external_rest_endpoint`** stored procedure; convert structured data to JSON for
 the model; send results to a language model; and extract the response.
 
-### What this actually looks like in T-SQL
+### What Domain 3 looks like in T-SQL
 
-The thing that made Domain 3 click for me was realizing how *little* leaves the database.
-You store embeddings in a `VECTOR` column, search them with `VECTOR_SEARCH`, and call the
-model over REST — all from T-SQL:
+The thing that makes this domain click is realizing how *little* leaves the database. You
+store embeddings in a `VECTOR` column, search them with `VECTOR_SEARCH`, and call the model
+over REST — all from T-SQL:
 
 ```sql
 -- 1) A vector column holds the embedding for each chunk
@@ -121,13 +121,23 @@ CREATE TABLE dbo.DocChunks (
     Embedding   VECTOR(1536) NOT NULL      -- dimensions match your model
 );
 
--- 2) Semantic search: nearest neighbors to a query embedding
+-- 2) Semantic search: exact nearest neighbors (ENN) to a query embedding
 SELECT TOP (5) c.ChunkId, c.ChunkText,
        VECTOR_DISTANCE('cosine', c.Embedding, @queryEmbedding) AS Distance
 FROM   dbo.DocChunks AS c
 ORDER  BY Distance;     -- smaller cosine distance = more similar
 
--- 3) RAG: call an external model with the retrieved context
+-- 3) Or approximate nearest neighbors (ANN) once a vector index exists — faster at scale
+SELECT s.ChunkId, s.ChunkText, s.distance
+FROM   VECTOR_SEARCH(
+           TABLE      = dbo.DocChunks AS c,
+           COLUMN     = Embedding,
+           SIMILAR_TO = @queryEmbedding,
+           METRIC     = 'cosine',
+           TOP_N      = 5
+       ) AS s;
+
+-- 4) RAG: call an external model with the retrieved context
 DECLARE @response NVARCHAR(MAX);
 EXEC sp_invoke_external_rest_endpoint
      @url     = N'https://my-foundry.openai.azure.com/.../chat/completions?api-version=2024-10-21',
@@ -138,9 +148,19 @@ EXEC sp_invoke_external_rest_endpoint
 ```
 
 Retrieve with vectors, ground the model on what you found, generate the answer — the same
-RAG loop I build in app code, except the retrieval lives **in the database** and the model
-call is one stored procedure. Hybrid search just adds a full-text query alongside the vector
-search and blends the two ranked lists with **RRF**.
+RAG loop you'd build in app code, except retrieval lives **in the database** and the model
+call is one stored procedure. **Hybrid search** just adds a full-text query alongside the
+vector search and blends the two ranked lists with **RRF**.
+
+A few facts worth memorizing:
+
+- **Cosine distance:** smaller = more similar (0 means identical direction).
+- **`VECTOR_SEARCH`** is **ANN** and needs a vector index; **`VECTOR_DISTANCE`** in an
+  `ORDER BY` is **ENN** — a full scan, exact but slower.
+- **RRF** is the standard way to combine keyword and vector results.
+- The dimension of your **`VECTOR(n)`** column **must equal** the embedding model's output
+  dimension.
+- Prefer **Managed Identity** over API keys when SQL authenticates to a model endpoint.
 
 ## My 5-week plan
 
@@ -152,14 +172,14 @@ search and blends the two ranked lists with **RRF**.
 | 4 | Domain 2 — Always Encrypted, RLS, DDM, securing REST/GraphQL/MCP, Query Store |
 | 5 | SQL Database Projects + DAB + CI/CD, then the free practice assessment and review |
 
-## Vocabulary I want cold
+## Vocabulary to know cold
 
 - **Embedding** — a numeric vector capturing semantic meaning; stored in a `VECTOR` column.
 - **`VECTOR` data type** — native SQL type for embeddings; the backbone of semantic search.
 - **`VECTOR_DISTANCE` / `VECTOR_SEARCH`** — similarity between two vectors (with a metric) /
   index-backed nearest-neighbor search.
 - **ANN vs ENN** — approximate nearest neighbor (fast, scalable) vs exact (precise, slower).
-- **Distance metric** — cosine, Euclidean, or dot product; pick to match how the model was trained.
+- **Distance metric** — cosine, Euclidean, or dot product; match how the model was trained.
 - **Chunking** — splitting documents into passages before embedding and indexing.
 - **Full-text / vector / hybrid search** — keyword / semantic similarity / both combined.
 - **Reciprocal Rank Fusion (RRF)** — merges multiple ranked result sets into one score.
@@ -189,7 +209,6 @@ search and blends the two ranked lists with **RRF**.
   [Data API builder](https://learn.microsoft.com/en-us/azure/data-api-builder/),
   [SQL Database Projects](https://learn.microsoft.com/en-us/sql/tools/sql-database-projects/sql-database-projects)
 
-The best part, same as with AI-103: I can practice nearly all of this in my own tenant. I've
-already got the SQL MCP server and a Foundry agent; adding a `VECTOR` column, generating
-embeddings, and wiring up an in-database RAG query is the natural next build. More posts to
-come as I work through each domain.
+The best part is that I can practice nearly all of this in my own tenant: add a `VECTOR`
+column, generate embeddings, wire up an in-database RAG query, and expose it through DAB or
+an MCP server. More posts to come as I work through each domain.
