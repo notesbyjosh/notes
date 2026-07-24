@@ -208,6 +208,7 @@ A few facts worth memorizing:
   [`sp_invoke_external_rest_endpoint`](https://learn.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-invoke-external-rest-endpoint-transact-sql),
   [Data API builder](https://learn.microsoft.com/en-us/azure/data-api-builder/),
   [SQL Database Projects](https://learn.microsoft.com/en-us/sql/tools/sql-database-projects/sql-database-projects)
+- 📺 Microsoft Reactor: [Get Certified SQL+AI (DP-800): Bring AI to SQL with Embeddings, Search, and RAG](https://www.youtube.com/watch?v=SLXvXKb9758)
 
 The best part is that I can practice nearly all of this in my own tenant: add a `VECTOR`
 column, generate embeddings, wire up an in-database RAG query, and expose it through DAB or
