@@ -200,6 +200,7 @@
 
   /* ---------- table ---------- */
   .tablewrap{margin-top:22px}
+  #tableBox{overflow-x:auto}
   .toggle-table{border:1px solid var(--hair); background:var(--panel); color:var(--ink); font:inherit;
     font-weight:600; font-size:13px; border-radius:10px; padding:9px 15px; cursor:pointer}
   .toggle-table:hover{border-color:var(--accent); color:var(--accent)}
@@ -211,6 +212,8 @@
   th.num,td.num{text-align:right; font-variant-numeric:tabular-nums}
   tbody tr:hover{background:var(--panel-2)}
   .yrs{color:var(--muted); font-variant-numeric:tabular-nums; font-size:12px}
+  .tyears{display:flex; flex-wrap:wrap; gap:5px; max-width:min(64vw,560px); padding:2px 0}
+  td .chip{font-size:11.5px}
   caption{caption-side:bottom; text-align:left; color:var(--faint); font-size:11.5px; padding-top:10px}
 
   footer{margin-top:26px; padding-top:16px; border-top:1px solid var(--hair); color:var(--faint);
@@ -566,7 +569,13 @@
     const t=box.append('table');
     t.append('caption').text('WV high school cross country state team championships, 1958\u20132025. Click a column heading to sort.');
     const cols=[["school","School",false],["total","Titles",true],["boys","Boys",true],["girls","Girls",true],["yearsStr","Years won",false]];
-    CHAMPS.forEach(d=>d.yearsStr=d.years.join(', '));
+    CHAMPS.forEach(d=>{
+      d.yearsStr=d.years.join(', ');
+      // one colored pill per title (a year appears twice when a school swept boys + girls)
+      d.yearsPills='<div class="tyears">'+d.entries
+        .map(e=>`<span class="chip ${e.gender==='Boys'?'b':'g'}" title="${e.class} ${e.gender}">${e.year}</span>`)
+        .join('')+'</div>';
+    });
     const thead=t.append('thead').append('tr');
     thead.selectAll('th').data(cols).join('th').attr('class',c=>c[2]?'num':null).text(c=>c[1])
       .on('click',(e,c)=>sortBy(c[0],c[2]));
@@ -580,8 +589,9 @@
       });
       const tr=tb.selectAll('tr').data(rows,d=>d.school).join('tr');
       tr.selectAll('td').data(d=>[
-        {v:d.school}, {v:d.total,n:1},{v:d.boys,n:1},{v:d.girls,n:1},{v:d.yearsStr,c:'yrs'}
-      ]).join('td').attr('class',x=>x.n?'num':x.c||null).text(x=>x.v);
+        {v:d.school}, {v:d.total,n:1},{v:d.boys,n:1},{v:d.girls,n:1},{html:d.yearsPills}
+      ]).join('td').attr('class',x=>x.n?'num':null)
+        .each(function(x){ const c=d3.select(this); if(x.html!==undefined) c.html(x.html); else c.text(x.v); });
       tr.order();
     }
     window._sortBy=function(k,isNum){ if(cur.key===k) cur.desc=!cur.desc; else {cur.key=k; cur.desc=isNum;} draw(); };
