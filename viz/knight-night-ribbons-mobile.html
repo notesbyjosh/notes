@@ -57,8 +57,10 @@
 
   .legend{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px}
   .lg{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--sec);background:var(--surface-2);
-    border:1px solid var(--border);border-radius:16px;padding:3px 9px 3px 6px}
+    border:1px solid var(--border);border-radius:16px;padding:4px 10px 4px 7px;cursor:pointer;user-select:none;transition:opacity .15s}
   .lg .sw{width:14px;height:6px;border-radius:3px}
+  .lg.on{color:var(--ink);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+  .lg.off{opacity:.4}
   .hint{font-size:11.5px;color:var(--muted);margin:2px 2px 8px;text-align:center}
 
   svg{display:block;width:100%;height:auto;touch-action:pan-y}
@@ -69,7 +71,7 @@
   g.dim .rb, g.dim .endlab{opacity:.09}
   g.hot .rb{stroke-width:5.5}
   g.hot .endlab{fill:var(--ink);font-weight:700}
-  .endlab{font-family:var(--disp);font-weight:600;font-size:6.4px;fill:var(--sec)}
+  .endlab{font-family:var(--disp);font-weight:600;font-size:6.4px;fill:var(--sec);cursor:pointer}
   .endlab.l{text-anchor:end}
   .endlab.r{text-anchor:start}
 
@@ -115,7 +117,7 @@
     <button class="play" id="play">▶ Play</button>
   </div>
   <div class="legend" id="legend"></div>
-  <p class="hint" id="hint">Tap any ribbon for its splits</p>
+  <p class="hint" id="hint">Tap a ribbon or a name for its splits · tap a color chip to filter movers</p>
   <svg id="svg" role="img" aria-label="Relay team rank by leg"></svg>
 
   <a class="footlink" href="https://notesbyjosh.github.io/notes/viz/knight-night-ribbons.html">Open the full interactive board →</a>
@@ -156,6 +158,7 @@ tb.onclick=()=>{theme=cur()==='dark'?'light':'dark';tset(theme);applyTheme();};
 // geometry
 const NS='http://www.w3.org/2000/svg';
 let DATA,N,x,y,teams,gender='boys',spot='',playTimers=[],playing=false;
+const bucketSel=new Set();
 const M={t:30,b:14,l:88,r:88}, W=400;
 const ABBR={'Buckhannon Upshur':'Buck Upshur','Fairmont Senior':'Fairmont Sr','Doddridge County':'Doddridge',
   'Ritchie County':'Ritchie','Webster County':'Webster','Lewis County':'Lewis','Tucker County':'Tucker',
@@ -171,7 +174,7 @@ function bez(pts){let d=`M ${pts[0].x} ${pts[0].y}`;
   return d;}
 
 function build(g){
-  gender=g; DATA=ALL[g]; N=DATA.length; spot=''; playing=false; clearTimers();
+  gender=g; DATA=ALL[g]; N=DATA.length; spot=''; playing=false; clearTimers(); bucketSel.clear();
   DATA.forEach((t,i)=>{ t.id=i; t.delta=t.r[0]-t.r[3];
     t.bucket=t.delta>=8?'up2':t.delta>=3?'up1':t.delta<=-8?'dn2':t.delta<=-3?'dn1':'steady'; });
   // tiles
@@ -199,23 +202,31 @@ function build(g){
   teams.append('path').attr('class','hit').attr('d',line)
     .on('pointerdown',(e,d)=>{ document.getElementById('spot').value=d.id; select(d.id); });
   teams.append('text').attr('class','endlab l').attr('x',x(0)-5).attr('y',d=>y(d.r[0])+2.2)
-    .text(d=>abbr(d.school)+' '+d.letter);
+    .text(d=>abbr(d.school)+' '+d.letter).on('pointerdown',(e,d)=>select(d.id));
   teams.append('text').attr('class','endlab r').attr('x',x(3)+5).attr('y',d=>y(d.r[3])+2.2)
-    .text(d=>abbr(d.school)+' '+d.letter);
-  recolor(); applyFilter();
+    .text(d=>abbr(d.school)+' '+d.letter).on('pointerdown',(e,d)=>select(d.id));
+  recolor(); renderLegend(); applyFilter();
 }
 function recolor(){ if(!teams)return; teams.select('path.rb').attr('stroke',d=>cssv(BK[d.bucket])); }
 
 function applyFilter(){
-  const sid=spot===''?null:+spot;
-  teams.classed('dim',d=> sid!==null && d.id!==sid).classed('hot',d=> sid!==null && d.id===sid);
+  const sid=spot===''?null:+spot, anyB=bucketSel.size>0;
+  teams.classed('dim',d=> sid!==null ? d.id!==sid : (anyB ? !bucketSel.has(d.bucket) : false))
+       .classed('hot',d=> sid!==null && d.id===sid);
   if(sid!==null) teams.filter(d=>d.id===sid).each(function(){this.parentNode.appendChild(this);});
 }
-function select(id){ spot=String(id); applyFilter(); openSheet(DATA[id]); }
+function select(id){ spot=String(id); bucketSel.clear(); renderLegend();
+  document.getElementById('spot').value=id; applyFilter(); openSheet(DATA[id]); }
 
-// legend
-document.getElementById('legend').innerHTML=LEG.map(([b,l])=>
-  `<span class="lg"><span class="sw" style="background:var(${BK[b]})"></span>${l}</span>`).join('');
+// legend — clickable movement filters (tap a color to spotlight those movers)
+const legendEl=document.getElementById('legend');
+function renderLegend(){
+  legendEl.innerHTML=LEG.map(([b,l])=>{ const on=bucketSel.has(b), off=bucketSel.size>0&&!on;
+    return `<span class="lg${on?' on':''}${off?' off':''}" data-b="${b}"><span class="sw" style="background:var(${BK[b]})"></span>${l}</span>`; }).join('');
+  legendEl.querySelectorAll('.lg').forEach(el=>el.onclick=()=>toggleBucket(el.dataset.b));
+}
+function toggleBucket(b){ if(bucketSel.has(b))bucketSel.delete(b); else bucketSel.add(b);
+  spot=''; document.getElementById('spot').value=''; hideSheet(); renderLegend(); applyFilter(); }
 
 // detail sheet
 function openSheet(t){
@@ -231,8 +242,8 @@ function openSheet(t){
   mo.style.color=d>0?cssv('--up2'):d<0?cssv('--dn2'):cssv('--sec');
   sheet.classList.add('open'); backdrop.classList.add('open');
 }
-function closeSheet(){ sheet.classList.remove('open'); backdrop.classList.remove('open');
-  document.getElementById('spot').value=''; spot=''; applyFilter(); }
+function hideSheet(){ sheet.classList.remove('open'); backdrop.classList.remove('open'); }
+function closeSheet(){ hideSheet(); document.getElementById('spot').value=''; spot=''; applyFilter(); }
 document.getElementById('sheetClose').onclick=closeSheet;
 backdrop.onclick=closeSheet;
 
@@ -248,9 +259,10 @@ document.getElementById('spot').onchange=function(){ if(this.value===''){closeSh
 document.getElementById('play').onclick=function(){
   if(playing||!teams)return; playing=true; clearTimers();
   this.disabled=true; this.textContent='Drawing…';
-  const sid=spot===''?null:+spot;
-  const targets=teams.filter(d=> sid===null || d.id===sid);
-  teams.classed('dim',d=> sid!==null && d.id!==sid);
+  const sid=spot===''?null:+spot, anyB=bucketSel.size>0;
+  const inScope=d=> sid!==null ? d.id===sid : (anyB ? bucketSel.has(d.bucket) : true);
+  const targets=teams.filter(inScope);
+  teams.classed('dim',d=> (sid!==null||anyB) && !inScope(d));
   const dur=3200/1;
   targets.select('path.rb').each(function(){const L=this.getTotalLength();
     d3.select(this).interrupt().attr('stroke-dasharray',L).attr('stroke-dashoffset',L)
