@@ -66,8 +66,12 @@
   .glide{stroke:var(--grid);stroke-width:.8}
   .rb{fill:none;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;transition:opacity .15s,stroke-width .15s}
   .hit{fill:none;stroke:transparent;stroke-width:13;stroke-linecap:round}
-  g.dim .rb{opacity:.09}
+  g.dim .rb, g.dim .endlab{opacity:.09}
   g.hot .rb{stroke-width:5.5}
+  g.hot .endlab{fill:var(--ink);font-weight:700}
+  .endlab{font-family:var(--disp);font-weight:600;font-size:6.4px;fill:var(--sec)}
+  .endlab.l{text-anchor:end}
+  .endlab.r{text-anchor:start}
 
   .footlink{display:block;text-align:center;margin:16px 2px 4px;font-family:var(--disp);font-weight:600;
     font-size:15px;letter-spacing:.03em;color:var(--ink);background:var(--surface);border:1px solid var(--border);
@@ -152,7 +156,12 @@ tb.onclick=()=>{theme=cur()==='dark'?'light':'dark';tset(theme);applyTheme();};
 // geometry
 const NS='http://www.w3.org/2000/svg';
 let DATA,N,x,y,teams,gender='boys',spot='',playTimers=[],playing=false;
-const M={t:30,b:14,l:34,r:34}, W=400;
+const M={t:30,b:14,l:88,r:88}, W=400;
+const ABBR={'Buckhannon Upshur':'Buck Upshur','Fairmont Senior':'Fairmont Sr','Doddridge County':'Doddridge',
+  'Ritchie County':'Ritchie','Webster County':'Webster','Lewis County':'Lewis','Tucker County':'Tucker',
+  'North Marion':'N Marion','South Harrison':'S Harrison','Heritage Christian':'Heritage',
+  'John Marshall':'J Marshall','East Fairmont':'E Fairmont'};
+const abbr=s=>(ABBR[s]||s);
 const svg=d3.select('#svg');
 const sheet=document.getElementById('sheet'), backdrop=document.getElementById('backdrop');
 function clearTimers(){playTimers.forEach(t=>t.stop&&t.stop());playTimers=[];}
@@ -189,6 +198,10 @@ function build(g){
   teams.append('path').attr('class','rb').attr('stroke',d=>cssv(BK[d.bucket])).attr('d',line);
   teams.append('path').attr('class','hit').attr('d',line)
     .on('pointerdown',(e,d)=>{ document.getElementById('spot').value=d.id; select(d.id); });
+  teams.append('text').attr('class','endlab l').attr('x',x(0)-5).attr('y',d=>y(d.r[0])+2.2)
+    .text(d=>abbr(d.school)+' '+d.letter);
+  teams.append('text').attr('class','endlab r').attr('x',x(3)+5).attr('y',d=>y(d.r[3])+2.2)
+    .text(d=>abbr(d.school)+' '+d.letter);
   recolor(); applyFilter();
 }
 function recolor(){ if(!teams)return; teams.select('path.rb').attr('stroke',d=>cssv(BK[d.bucket])); }
