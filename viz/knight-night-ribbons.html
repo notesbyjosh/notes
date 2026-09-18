@@ -37,6 +37,11 @@
   *{box-sizing:border-box}
   body{margin:0;background:var(--page);color:var(--ink);font-family:var(--body);line-height:1.45}
   .wrap{max-width:1000px;margin:0 auto;padding-block:26px 40px;padding-inline:16px}
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+  .themebtn{flex:none;font-family:var(--body);font-size:12.5px;color:var(--ink);
+    background:var(--surface);border:1px solid var(--border);border-radius:20px;
+    padding:7px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+  .themebtn:hover{border-color:var(--accent)}
 
   header .eyebrow{font-family:var(--disp);text-transform:uppercase;letter-spacing:.22em;
     font-size:12px;font-weight:600;color:var(--accent);margin:0}
@@ -150,6 +155,7 @@
 </style>
 
 <div class="wrap">
+  <div class="topbar">
   <header>
     <p class="eyebrow">⚔ Preston Knights · Kingwood, WV · 2026</p>
     <h1>Knight Night Relays</h1>
@@ -160,6 +166,8 @@
       <button data-g="girls" role="tab">Girls</button>
     </div>
   </header>
+  <button class="themebtn" id="theme" aria-label="Toggle light or dark mode"></button>
+  </div>
 
   <div class="tiles" id="tiles"></div>
 
@@ -193,6 +201,19 @@ const DATASETS = {
 const STAGES = ['After Leg 1','After Leg 2','After Leg 3','Final'];
 const short = t => t.school + ' ' + t.letter;
 const fmt = s => { const m=Math.floor(s/60); return m+':'+(s-60*m).toFixed(1).padStart(4,'0'); };
+
+// ---- light / dark toggle (defaults to the system setting, remembers the choice) ----
+const _root=document.documentElement, _themeBtn=document.getElementById('theme');
+function _tstore(v){ try{ localStorage.setItem('knt-theme',v); }catch(e){} }
+function _tread(){ try{ return localStorage.getItem('knt-theme'); }catch(e){ return null; } }
+let _theme=_tread();
+function _cur(){ return _theme || (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'); }
+function _applyTheme(){
+  if(_theme) _root.setAttribute('data-theme',_theme); else _root.removeAttribute('data-theme');
+  _themeBtn.textContent = _cur()==='dark' ? '☀︎ Light' : '☾ Dark';
+}
+_themeBtn.addEventListener('click',()=>{ _theme=_cur()==='dark'?'light':'dark'; _tstore(_theme); _applyTheme(); });
+_applyTheme();
 
 // movement bucket by net rank change (leg 1 -> final)
 function bucket(d){ if(d>=8)return'up2'; if(d>=3)return'up1'; if(d<=-8)return'dn2'; if(d<=-3)return'dn1'; return'steady'; }
