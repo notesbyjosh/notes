@@ -1,0 +1,468 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Knight Night Relays</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root{
+    /* Preston Knights — black & silver */
+    --page:#e9eaec; --surface:#ffffff; --surface-2:#f1f2f4;
+    --ink:#14161a; --sec:#4b4f56; --muted:#868b93;
+    --grid:#e2e4e7; --base:#c3c7cc; --border:rgba(20,22,26,.12);
+    --up2:#1c5cab; --up1:#5aa0f0; --steady:#a2acba; --dn1:#ef8a5f; --dn2:#d5352f;
+    --accent:#2b2f36; --accent-ink:#ffffff;   /* charcoal-black accent, white text on it */
+    --h1a:#26292e; --h1b:#7c828a;              /* brushed-metal title gradient */
+    --disp:'Oswald',system-ui,sans-serif;
+    --body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --page:#0b0c0e; --surface:#15171b; --surface-2:#0f1114;
+      --ink:#f2f3f5; --sec:#b9bdc4; --muted:#7f858d;
+      --grid:#23262b; --base:#33373d; --border:rgba(255,255,255,.13);
+      --up2:#4a92e8; --up1:#7bb2f2; --steady:#6f7885; --dn1:#ef8a5f; --dn2:#ea5b56;
+      --accent:#c7ccd2; --accent-ink:#14161a;   /* silver accent, black text on it */
+      --h1a:#aeb4bc; --h1b:#ffffff;
+    }
+  }
+  :root[data-theme="dark"]{
+    --page:#0b0c0e; --surface:#15171b; --surface-2:#0f1114;
+    --ink:#f2f3f5; --sec:#b9bdc4; --muted:#7f858d;
+    --grid:#23262b; --base:#33373d; --border:rgba(255,255,255,.13);
+    --up2:#4a92e8; --up1:#7bb2f2; --steady:#6f7885; --dn1:#ef8a5f; --dn2:#ea5b56;
+    --accent:#c7ccd2; --accent-ink:#14161a;
+    --h1a:#aeb4bc; --h1b:#ffffff;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--page);color:var(--ink);font-family:var(--body);line-height:1.45}
+  .wrap{max-width:1000px;margin:0 auto;padding-block:26px 40px;padding-inline:16px}
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+  .themebtn{flex:none;font-family:var(--body);font-size:12.5px;color:var(--ink);
+    background:var(--surface);border:1px solid var(--border);border-radius:20px;
+    padding:7px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+  .themebtn:hover{border-color:var(--accent)}
+
+  header .eyebrow{font-family:var(--disp);text-transform:uppercase;letter-spacing:.22em;
+    font-size:12px;font-weight:600;color:var(--accent);margin:0}
+  header h1{font-family:var(--disp);font-weight:600;letter-spacing:.01em;
+    font-size:clamp(30px,6vw,50px);line-height:1.16;margin:.1em 0 .12em;padding-bottom:.06em;text-wrap:balance;
+    color:var(--ink);background:linear-gradient(176deg,var(--h1a),var(--h1b) 52%,var(--h1a));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  header .credit{font-size:12px;color:var(--muted);margin-top:4px}
+  header .credit a{color:var(--sec);text-decoration:underline}
+  header .credit a:hover{color:var(--accent)}
+  header .sub{color:var(--sec);font-size:15px;max-width:64ch;margin:0}
+  header .meta{color:var(--muted);font-size:12.5px;margin-top:6px}
+
+  .pills{display:inline-flex;background:var(--surface-2);border:1px solid var(--border);
+    border-radius:24px;padding:3px;gap:2px;margin-top:16px}
+  .pills button{font-family:var(--disp);font-size:13.5px;font-weight:500;letter-spacing:.05em;
+    text-transform:uppercase;padding:8px 26px;border:0;border-radius:22px;background:transparent;
+    color:var(--sec);cursor:pointer;transition:background .15s,color .15s}
+  .pills button.on{background:var(--accent);color:var(--accent-ink)}
+  .pills button:not(.on):hover{color:var(--ink)}
+
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0 18px}
+  @media(max-width:640px){.tiles{grid-template-columns:repeat(2,1fr)}}
+  .tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;
+    padding:12px 13px;display:flex;flex-direction:column;gap:3px}
+  .tile .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-weight:600}
+  .tile .v{font-family:var(--disp);font-size:23px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+  .tile .d{font-size:11.5px;color:var(--sec)}
+  .tile .v.up{color:var(--up2)} .tile .v.dn{color:var(--dn2)}
+
+  .panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;
+    padding:16px 16px 6px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .controls{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;margin-bottom:8px}
+  .controls label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);
+    font-weight:600;margin-right:7px}
+  select{font-family:var(--body);font-size:13px;color:var(--ink);background:var(--surface-2);
+    border:1px solid var(--border);border-radius:8px;padding:6px 10px;min-width:170px}
+  .legend{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto}
+  .lg{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--sec);
+    background:var(--surface-2);border:1px solid var(--border);border-radius:20px;
+    padding:4px 10px 4px 8px;cursor:pointer;user-select:none;transition:opacity .15s,box-shadow .15s,color .15s}
+  .lg .sw{width:16px;height:8px;border-radius:3px;flex:none}
+  .lg.sel{color:var(--ink);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+  .lg.off{opacity:.34}
+  .btn{font-family:var(--body);font-size:12.5px;color:var(--ink);background:var(--surface-2);
+    border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer}
+  .btn:hover{border-color:var(--accent)}
+  .btn:disabled{opacity:.55;cursor:default}
+  .seg{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .seg button{font-family:var(--body);font-size:12px;padding:6px 11px;background:var(--surface-2);
+    color:var(--sec);border:0;border-right:1px solid var(--border);cursor:pointer;font-variant-numeric:tabular-nums}
+  .seg button:last-child{border-right:0}
+  .seg button.on{background:var(--accent);color:var(--accent-ink)}
+  .hint{font-size:12px;color:var(--muted);margin:2px 2px 10px}
+
+  .chartbox{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  svg.ribbon{display:block;width:100%;min-width:720px;max-width:none;height:auto;font-family:var(--body)}
+  .stagelab{font-family:var(--disp);font-size:12.5px;font-weight:600;letter-spacing:.04em;
+    text-transform:uppercase;fill:var(--ink)}
+  .stagesub{font-size:9.5px;fill:var(--muted)}
+  .glide{stroke:var(--grid);stroke-width:1;stroke-dasharray:2 4}
+  .endlab{font-size:8.3px;fill:var(--sec)}
+  .endlab .rk{font-weight:600;fill:var(--ink);font-variant-numeric:tabular-nums}
+  .endlab.left{text-anchor:end}
+  .endlab.right{text-anchor:start}
+  .ribbon path.rb{fill:none;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
+    opacity:.92;transition:opacity .14s,stroke-width .14s;cursor:pointer}
+  .ribbon .node{transition:opacity .14s}
+  g.team.dim path.rb, g.team.dim .node, g.team.dim text{opacity:.08}
+  g.team.hot path.rb{stroke-width:10;opacity:1}
+  g.team.hot text{opacity:1;font-weight:600}
+  g.team.hot .node{opacity:1}
+
+  .tooltip{position:fixed;z-index:30;pointer-events:none;opacity:0;transition:opacity .1s;
+    background:var(--surface);border:1px solid var(--border);border-radius:11px;
+    box-shadow:0 8px 26px rgba(0,0,0,.22);padding:11px 13px;max-width:270px;font-size:12px}
+  .tt-team{font-family:var(--disp);font-weight:600;font-size:15px;letter-spacing:.01em}
+  .tt-school{color:var(--muted);font-size:11px;margin-bottom:7px}
+  .tt-row{display:grid;grid-template-columns:52px 1fr auto;gap:8px;align-items:baseline;
+    font-variant-numeric:tabular-nums}
+  .tt-row .st{color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em}
+  .tt-row .rk{font-weight:600}
+  .tt-row .cu{color:var(--sec)}
+  .tt-move{margin-top:8px;padding-top:7px;border-top:1px solid var(--border);font-size:12px;font-weight:600}
+
+  table{border-collapse:collapse;width:100%;font-size:12.5px;font-variant-numeric:tabular-nums;margin-top:6px}
+  th,td{padding:5px 8px;text-align:right;border-bottom:1px solid var(--border);white-space:nowrap}
+  th:first-child,td:first-child,th:nth-child(2),td:nth-child(2){text-align:left}
+  thead th{font-family:var(--disp);font-weight:500;text-transform:uppercase;letter-spacing:.05em;
+    font-size:10.5px;color:var(--muted);position:sticky;top:0;background:var(--surface)}
+  tbody tr:hover{background:var(--surface-2)}
+  .tblwrap{max-height:440px;overflow:auto;margin-top:10px;border:1px solid var(--border);border-radius:10px}
+  .foot{font-size:11.5px;color:var(--muted);margin-top:14px;line-height:1.5}
+
+  /* leg-by-leg heatmap (under the toggle) */
+  .hlegend{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--sec);margin:8px 2px 4px}
+  .hlegend .ramp{height:11px;width:190px;border-radius:3px;border:1px solid var(--border)}
+  .hlegend .cap2{color:var(--muted)}
+  table.heat{border-collapse:separate;border-spacing:0;width:100%;min-width:520px;margin-top:0}
+  table.heat thead th{position:sticky;top:0;z-index:2;background:var(--surface);text-align:center;
+    font-family:var(--disp);font-weight:500;text-transform:uppercase;letter-spacing:.04em;
+    font-size:10.5px;color:var(--muted);padding:8px 6px;border-bottom:1px solid var(--border)}
+  table.heat thead th:first-child{left:0;z-index:3;text-align:left;padding-left:10px}
+  table.heat thead th .mi{display:block;font-family:var(--body);font-size:9px;letter-spacing:0;text-transform:none}
+  table.heat tbody th{position:sticky;left:0;z-index:1;background:var(--surface);text-align:left;
+    font-weight:500;white-space:nowrap;padding:0 10px;font-size:11.5px;
+    border-bottom:1px solid var(--border);border-right:1px solid var(--border)}
+  table.heat tbody th .rk{color:var(--muted);font-weight:600;margin-right:6px}
+  table.heat td.hcell{text-align:center;height:22px;padding:3px 6px;font-size:11px;font-weight:500;
+    font-variant-numeric:tabular-nums;border-bottom:1px solid var(--surface);border-right:1px solid var(--surface)}
+  table.heat td.hfin{text-align:right;padding:0 10px;font-size:11px;color:var(--sec);
+    background:var(--surface);white-space:nowrap;border-bottom:1px solid var(--border)}
+  table.heat td.hfin b{color:var(--ink)}
+</style>
+
+<div class="wrap">
+  <div class="topbar">
+  <header>
+    <p class="eyebrow">⚔ Hosted by Preston Knights · Kingwood, WV · 2026</p>
+    <h1>Knight Night Relays</h1>
+    <p class="sub">How each team's 4&nbsp;×&nbsp;1.5-mile relay rose and fell as every leg was added — ranked by cumulative time after each runner. Toggle boys or girls, then follow a ribbon left to right to see a team climb or slide.</p>
+    <p class="meta" id="meta"></p>
+    <p class="credit">Results and timing by <a href="https://mountaintiming.com" target="_blank" rel="noopener">mountaintiming.com</a></p>
+    <div class="pills" id="gender" role="tablist" aria-label="Boys or girls">
+      <button data-g="boys" class="on" role="tab">Boys</button>
+      <button data-g="girls" role="tab">Girls</button>
+    </div>
+  </header>
+  <button class="themebtn" id="theme" aria-label="Toggle light or dark mode"></button>
+  </div>
+
+  <div class="tiles" id="tiles"></div>
+
+  <div class="panel">
+    <div class="controls">
+      <div><label for="school">Highlight school</label>
+        <select id="school"><option value="">All schools</option></select></div>
+      <button class="btn" id="play">▶ Play</button>
+      <div style="display:flex;align-items:center"><label for="speed">Speed</label>
+        <div class="seg" id="speed"><button data-s="0.5">0.5×</button><button data-s="1" class="on">1×</button><button data-s="2">2×</button></div></div>
+      <button class="btn" id="clear">Clear selection</button>
+      <div class="legend" id="legend"></div>
+    </div>
+    <p class="hint">Hover a ribbon or a name to trace one team · click to pin it · click a color chip to spotlight those movers.</p>
+    <div class="chartbox"><svg class="ribbon" id="svg" role="img" aria-label="Ribbon chart of relay team rank by leg"></svg></div>
+    <div style="margin:6px 0 12px"><button class="btn" id="toggleTable" aria-expanded="false">Show leg-by-leg heatmap</button></div>
+    <div id="tablehost" hidden></div>
+    <p class="foot" id="foot"></p>
+  </div>
+</div>
+<div class="tooltip" id="tt"></div>
+
+<script id="data-boys" type="application/json">[{"team": "Morgantown Relay A", "school": "Morgantown", "letter": "A", "runners": ["Joshua Shrewsberry", "Kayden Taylor", "Maxwell Abildso", "Joaquin Summers"], "legs": ["7:18.4", "7:42.6", "7:28.5", "7:17.4"], "sec": [438.4, 462.6, 448.5, 437.4], "cum": [438.4, 901.0, 1349.5, 1786.9], "total": "29:47.0", "rank": {"1": 2, "2": 3, "3": 1, "4": 1}}, {"team": "University Relay A", "school": "University", "letter": "A", "runners": ["Logan Conroy", "James Gipple", "Matthew Grant", "Micah Gainer"], "legs": ["7:11.6", "7:48.7", "7:43.3", "7:10.7"], "sec": [431.6, 468.7, 463.3, 430.7], "cum": [431.6, 900.3, 1363.6, 1794.3], "total": "29:54.3", "rank": {"1": 1, "2": 2, "3": 2, "4": 2}}, {"team": "Elkins Relay A", "school": "Elkins", "letter": "A", "runners": ["Treven Schaefer", "Trevor George", "Donivan Petrice", "Dylan Fortney"], "legs": ["7:43.7", "7:09.2", "8:28.7", "7:49.2"], "sec": [463.7, 429.2, 508.7, 469.2], "cum": [463.7, 892.9, 1401.6, 1870.8], "total": "31:10.7", "rank": {"1": 7, "2": 1, "3": 3, "4": 3}}, {"team": "Jefferson Relay A", "school": "Jefferson", "letter": "A", "runners": ["Zarin Joyslin", "Jordan Baker", "Liam Kessel", "Shane Burkhardt"], "legs": ["7:51.2", "7:46.0", "8:10.8", "7:33.0"], "sec": [471.2, 466.0, 490.8, 453.0], "cum": [471.2, 937.2, 1428.0, 1881.0], "total": "31:21.0", "rank": {"1": 9, "2": 5, "3": 7, "4": 4}}, {"team": "Morgantown Relay B", "school": "Morgantown", "letter": "B", "runners": ["Andrew Richman", "Cole Boggs", "Philip Whoolery", "Timothy Samuel Jr"], "legs": ["7:37.8", "8:08.5", "7:56.5", "7:41.5"], "sec": [457.8, 488.5, 476.5, 461.5], "cum": [457.8, 946.3, 1422.8, 1884.3], "total": "31:24.3", "rank": {"1": 4, "2": 8, "3": 6, "4": 5}}, {"team": "Grafton Relay A", "school": "Grafton", "letter": "A", "runners": ["Chase Maier", "Briar Larew", "Cameron Gray", "Joel Edwards"], "legs": ["7:26.8", "8:01.0", "8:01.7", "7:56.1"], "sec": [446.8, 481.0, 481.7, 476.1], "cum": [446.8, 927.8, 1409.5, 1885.6], "total": "31:25.6", "rank": {"1": 3, "2": 4, "3": 4, "4": 6}}, {"team": "Preston Relay A", "school": "Preston", "letter": "A", "runners": ["Huxley Rumer", "Tyler Parks", "Wyatt Foley", "Isaac Copen"], "legs": ["7:46.8", "7:53.0", "8:02.7", "8:37.6"], "sec": [466.8, 473.0, 482.7, 517.6], "cum": [466.8, 939.8, 1422.5, 1940.1], "total": "32:20.1", "rank": {"1": 8, "2": 6, "3": 5, "4": 7}}, {"team": "St Marys Relay A", "school": "St Marys", "letter": "A", "runners": ["Koa Navarro", "Parker Barnes", "Noah Mote", "Desmond Parks"], "legs": ["7:39.8", "8:00.9", "8:53.6", "7:49.1"], "sec": [459.8, 480.9, 533.6, 469.1], "cum": [459.8, 940.7, 1474.3, 1943.4], "total": "32:23.3", "rank": {"1": 5, "2": 7, "3": 8, "4": 8}}, {"team": "John Marshall Relay A", "school": "John Marshall", "letter": "A", "runners": ["Kason Wolfe", "Braxten Ullom", "Carson Fitzpatrick", "Owen Paul"], "legs": ["7:57.9", "8:20.5", "8:50.0", "8:14.2"], "sec": [477.9, 500.5, 530.0, 494.2], "cum": [477.9, 978.4, 1508.4, 2002.6], "total": "33:22.6", "rank": {"1": 13, "2": 13, "3": 13, "4": 9}}, {"team": "Bridgeport Relay A", "school": "Bridgeport", "letter": "A", "runners": ["Graham Northey", "Ethan Mace", "Jayden Straley-Smith", "Peyton Muncy"], "legs": ["7:56.6", "8:26.0", "8:34.7", "8:32.3"], "sec": [476.6, 506.0, 514.7, 512.3], "cum": [476.6, 982.6, 1497.3, 2009.6], "total": "33:29.5", "rank": {"1": 12, "2": 14, "3": 11, "4": 10}}, {"team": "East Fairmont Relay A", "school": "East Fairmont", "letter": "A", "runners": ["Bryler Wilson", "Ben Barnes", "Dominic Rinehart", "Andrew Harr"], "legs": ["7:54.1", "8:20.7", "8:33.4", "8:46.0"], "sec": [474.1, 500.7, 513.4, 526.0], "cum": [474.1, 974.8, 1488.2, 2014.2], "total": "33:34.2", "rank": {"1": 11, "2": 11, "3": 9, "4": 11}}, {"team": "Ritchie County Relay A", "school": "Ritchie County", "letter": "A", "runners": ["Jenner Stewart", "Kenson Roman", "Seth Cronin", "Landen Bartlett"], "legs": ["7:42.9", "8:18.1", "8:48.1", "8:46.3"], "sec": [462.9, 498.1, 528.1, 526.3], "cum": [462.9, 961.0, 1489.1, 2015.4], "total": "33:35.4", "rank": {"1": 6, "2": 10, "3": 10, "4": 12}}, {"team": "Jefferson Relay B", "school": "Jefferson", "letter": "B", "runners": ["Jacob Hickey", "Oliver Merkel-Mason", "Cadmon Kesecker", "Matthew Hayes"], "legs": ["8:15.3", "8:17.5", "8:52.8", "8:15.0"], "sec": [495.3, 497.5, 532.8, 495.0], "cum": [495.3, 992.8, 1525.6, 2020.6], "total": "33:40.6", "rank": {"1": 20, "2": 15, "3": 15, "4": 13}}, {"team": "Fairmont Senior Relay A", "school": "Fairmont Senior", "letter": "A", "runners": ["Matthew Skidmore", "Thomas Ranson", "Quinn McVicker", "Michael Mooney"], "legs": ["7:52.5", "8:41.0", "8:39.1", "8:37.1"], "sec": [472.5, 521.0, 519.1, 517.1], "cum": [472.5, 993.5, 1512.6, 2029.7], "total": "33:49.7", "rank": {"1": 10, "2": 16, "3": 14, "4": 14}}, {"team": "Lewis County Relay A", "school": "Lewis County", "letter": "A", "runners": ["Logan Daniels", "Owen Debar", "Christian Treadway", "Brody Skinner"], "legs": ["9:16.5", "8:09.4", "8:50.8", "7:36.5"], "sec": [556.5, 489.4, 530.8, 456.5], "cum": [556.5, 1045.9, 1576.7, 2033.2], "total": "33:53.2", "rank": {"1": 47, "2": 25, "3": 22, "4": 15}}, {"team": "Washington Relay A", "school": "Washington", "letter": "A", "runners": ["Josh Molnar", "Alejandro Nance", "Eli Daly", "Jason Busch Jr"], "legs": ["8:22.2", "8:26.7", "8:37.0", "8:34.7"], "sec": [502.2, 506.7, 517.0, 514.7], "cum": [502.2, 1008.9, 1525.9, 2040.6], "total": "34:00.7", "rank": {"1": 26, "2": 18, "3": 16, "4": 16}}, {"team": "Buckhannon Upshur Relay A", "school": "Buckhannon Upshur", "letter": "A", "runners": ["Kenton Stump", "Lucas Fortney", "Bryce Mullens", "Mitchell Whitley"], "legs": ["8:28.5", "8:30.1", "8:53.8", "8:33.6"], "sec": [508.5, 510.1, 533.8, 513.6], "cum": [508.5, 1018.6, 1552.4, 2066.0], "total": "34:26.0", "rank": {"1": 27, "2": 21, "3": 19, "4": 17}}, {"team": "University Relay B", "school": "University", "letter": "B", "runners": ["Ben Honecker", "Blake Wannemacher", "Eliot Jackson", "Sutton Kinder"], "legs": ["8:05.6", "7:53.7", "8:58.9", "9:33.9"], "sec": [485.6, 473.7, 538.9, 573.9], "cum": [485.6, 959.3, 1498.2, 2072.1], "total": "34:32.1", "rank": {"1": 17, "2": 9, "3": 12, "4": 18}}, {"team": "North Marion Relay A", "school": "North Marion", "letter": "A", "runners": ["Brandon Williams", "Cohen Miller", "Leo Wright", "Gage Rye"], "legs": ["8:58.1", "8:35.2", "8:46.0", "8:22.8"], "sec": [538.1, 515.2, 526.0, 502.8], "cum": [538.1, 1053.3, 1579.3, 2082.1], "total": "34:42.2", "rank": {"1": 37, "2": 29, "3": 23, "4": 19}}, {"team": "Keyser Relay B", "school": "Keyser", "letter": "B", "runners": ["Landyn McGee", "Austin Umstot", "Ashtin Thomas", "Don Starcher"], "legs": ["8:20.9", "8:50.0", "9:00.3", "8:35.8"], "sec": [500.9, 530.0, 540.3, 515.8], "cum": [500.9, 1030.9, 1571.2, 2087.0], "total": "34:47.0", "rank": {"1": 24, "2": 23, "3": 20, "4": 20}}, {"team": "Jefferson Relay C", "school": "Jefferson", "letter": "C", "runners": ["Zack Burkhardt", "Beckett Basham", "London Jones", "Hunter Wright"], "legs": ["8:21.3", "9:02.7", "8:58.0", "8:28.8"], "sec": [501.3, 542.7, 538.0, 508.8], "cum": [501.3, 1044.0, 1582.0, 2090.8], "total": "34:50.7", "rank": {"1": 25, "2": 24, "3": 24, "4": 21}}, {"team": "Lincoln Relay A", "school": "Lincoln", "letter": "A", "runners": ["Carter Knight", "Cole Holt", "Keston Rose", "Jonathon Folmsbee"], "legs": ["8:02.8", "9:07.1", "9:29.1", "8:16.1"], "sec": [482.8, 547.1, 569.1, 496.1], "cum": [482.8, 1029.9, 1599.0, 2095.1], "total": "34:55.2", "rank": {"1": 16, "2": 22, "3": 26, "4": 22}}, {"team": "Musselman Relay A", "school": "Musselman", "letter": "A", "runners": ["Calvin Heflin", "Landon Butler", "Joe Sama", "Kyle Segal"], "legs": ["8:01.8", "8:50.8", "9:20.2", "8:42.4"], "sec": [481.8, 530.8, 560.2, 522.4], "cum": [481.8, 1012.6, 1572.8, 2095.2], "total": "34:55.2", "rank": {"1": 15, "2": 20, "3": 21, "4": 23}}, {"team": "Elkins Relay B", "school": "Elkins", "letter": "B", "runners": ["Luke Valentine", "Reed Burdette", "Levi Tenney", "Grant Morgan"], "legs": ["8:18.4", "8:27.0", "8:57.7", "9:16.1"], "sec": [498.4, 507.0, 537.7, 556.1], "cum": [498.4, 1005.4, 1543.1, 2099.2], "total": "34:59.1", "rank": {"1": 21, "2": 17, "3": 18, "4": 24}}, {"team": "Doddridge County Relay A", "school": "Doddridge County", "letter": "A", "runners": ["Samuel Gola", "Colton Key", "Cayleb Amos", "Landry Turner"], "legs": ["7:58.7", "8:18.7", "9:15.1", "9:28.4"], "sec": [478.7, 498.7, 555.1, 568.4], "cum": [478.7, 977.4, 1532.5, 2100.9], "total": "35:00.9", "rank": {"1": 14, "2": 12, "3": 17, "4": 25}}, {"team": "East Fairmont Relay B", "school": "East Fairmont", "letter": "B", "runners": ["Jude Morris", "Ryker Jordan", "Jonah Henderson", "Michael Gibson"], "legs": ["8:59.1", "8:37.5", "9:20.3", "8:27.8"], "sec": [539.1, 517.5, 560.3, 507.8], "cum": [539.1, 1056.6, 1616.9, 2124.7], "total": "35:24.7", "rank": {"1": 39, "2": 30, "3": 27, "4": 26}}, {"team": "Hampshire Relay A", "school": "Hampshire", "letter": "A", "runners": ["Ethan Richman", "Jack Dice", "Chase Hochard", "Wyatt Thorne"], "legs": ["8:10.8", "10:03.9", "9:22.1", "8:01.5"], "sec": [490.8, 603.9, 562.1, 481.5], "cum": [490.8, 1094.7, 1656.8, 2138.3], "total": "35:38.3", "rank": {"1": 18, "2": 38, "3": 35, "4": 27}}, {"team": "Fairmont Senior Relay B", "school": "Fairmont Senior", "letter": "B", "runners": ["Mason Curry", "Colin Curry", "Tyler Sharps", "Yeraly Temrkan"], "legs": ["8:42.8", "9:17.1", "8:57.5", "8:51.6"], "sec": [522.8, 557.1, 537.5, 531.6], "cum": [522.8, 1079.9, 1617.4, 2149.0], "total": "35:49.0", "rank": {"1": 29, "2": 34, "3": 28, "4": 28}}, {"team": "Grafton Relay B", "school": "Grafton", "letter": "B", "runners": ["Caleb Edwards", "Brayden Freshour", "Luke Riffle", "Jake Davis"], "legs": ["8:20.7", "9:06.9", "9:32.6", "8:49.0"], "sec": [500.7, 546.9, 572.6, 529.0], "cum": [500.7, 1047.6, 1620.2, 2149.2], "total": "35:49.2", "rank": {"1": 23, "2": 26, "3": 29, "4": 29}}, {"team": "Morgantown Relay D", "school": "Morgantown", "letter": "D", "runners": ["Colton Hetzer", "Trent Kerzak", "Eli Naumann", "Parker Noah"], "legs": ["8:54.6", "8:34.5", "9:07.0", "9:14.2"], "sec": [534.6, 514.5, 547.0, 554.2], "cum": [534.6, 1049.1, 1596.1, 2150.3], "total": "35:50.4", "rank": {"1": 33, "2": 27, "3": 25, "4": 30}}, {"team": "Martinsburg Relay A", "school": "Martinsburg", "letter": "A", "runners": ["James Riley", "Cam Exline", "Aron Knotts", "Christopher Prout"], "legs": ["9:13.4", "9:08.7", "9:08.8", "8:31.8"], "sec": [553.4, 548.7, 548.8, 511.8], "cum": [553.4, 1102.1, 1650.9, 2162.7], "total": "36:02.8", "rank": {"1": 43, "2": 41, "3": 33, "4": 31}}, {"team": "Bridgeport Relay B", "school": "Bridgeport", "letter": "B", "runners": ["Brady Elliott", "Andrew Wagner", "Sam Mazza", "Cole Phillips"], "legs": ["8:57.6", "8:48.4", "9:27.0", "8:52.0"], "sec": [537.6, 528.4, 567.0, 532.0], "cum": [537.6, 1066.0, 1633.0, 2165.0], "total": "36:05.0", "rank": {"1": 36, "2": 32, "3": 31, "4": 32}}, {"team": "St Marys Relay B", "school": "St Marys", "letter": "B", "runners": ["Wyatt Payne", "Hunter Haddox", "Carter Sole", "Riley Gerlach"], "legs": ["8:36.4", "9:14.4", "9:26.5", "9:41.9"], "sec": [516.4, 554.4, 566.5, 581.9], "cum": [516.4, 1070.8, 1637.3, 2219.2], "total": "36:59.1", "rank": {"1": 28, "2": 33, "3": 32, "4": 33}}, {"team": "Webster County Relay A", "school": "Webster County", "letter": "A", "runners": ["Spencer Baird", "Joston Lewis", "Asher Lawson", "Cullen Brown"], "legs": ["8:44.2", "9:29.0", "9:18.6", "9:31.0"], "sec": [524.2, 569.0, 558.6, 571.0], "cum": [524.2, 1093.2, 1651.8, 2222.8], "total": "37:02.9", "rank": {"1": 30, "2": 37, "3": 34, "4": 34}}, {"team": "East Fairmont Relay C", "school": "East Fairmont", "letter": "C", "runners": ["Dean Schaeffer", "Miles Tichner", "Reese Tennant", "Jonathan Bowers"], "legs": ["9:12.3", "9:18.4", "9:36.6", "9:06.0"], "sec": [552.3, 558.4, 576.6, 546.0], "cum": [552.3, 1110.7, 1687.3, 2233.3], "total": "37:13.3", "rank": {"1": 42, "2": 44, "3": 38, "4": 35}}, {"team": "Hampshire Relay B", "school": "Hampshire", "letter": "B", "runners": ["Levi Richman", "Daed Burns", "Grayson Dillon", "Jacob McNelis"], "legs": ["8:47.5", "8:44.0", "11:15.7", "8:28.3"], "sec": [527.5, 524.0, 675.7, 508.3], "cum": [527.5, 1051.5, 1727.2, 2235.5], "total": "37:15.6", "rank": {"1": 31, "2": 28, "3": 47, "4": 36}}, {"team": "University Relay C", "school": "University", "letter": "C", "runners": ["Nathan White", "Josh Perl", "Ajay Balakrishnan", "Caleb Barkhurst"], "legs": ["8:14.7", "8:36.3", "10:19.3", "10:16.6"], "sec": [494.7, 516.3, 619.3, 616.6], "cum": [494.7, 1011.0, 1630.3, 2246.9], "total": "37:26.9", "rank": {"1": 19, "2": 19, "3": 30, "4": 37}}, {"team": "Heritage Christian Relay A", "school": "Heritage Christian", "letter": "A", "runners": ["Cam Rogers", "Judah Rhodes", "Brady Mills", "Adam Russel"], "legs": ["9:29.7", "9:24.1", "9:33.4", "9:15.8"], "sec": [569.7, 564.1, 573.4, 555.8], "cum": [569.7, 1133.8, 1707.2, 2263.0], "total": "37:43.0", "rank": {"1": 52, "2": 47, "3": 43, "4": 38}}, {"team": "Martinsburg Relay B", "school": "Martinsburg", "letter": "B", "runners": ["Jayden Garcia", "Donivan Collis", "Patrick Henry", "Nate Riley"], "legs": ["8:59.5", "9:46.2", "9:50.1", "9:13.6"], "sec": [539.5, 586.2, 590.1, 553.6], "cum": [539.5, 1125.7, 1715.8, 2269.4], "total": "37:49.3", "rank": {"1": 40, "2": 46, "3": 45, "4": 39}}, {"team": "Washington Relay B", "school": "Washington", "letter": "B", "runners": ["Hayden Ocasio", "Weston Caldwell", "Joseph Puzzini", "Alexander Mancillas"], "legs": ["8:19.3", "9:57.5", "10:17.1", "9:18.8"], "sec": [499.3, 597.5, 617.1, 558.8], "cum": [499.3, 1096.8, 1713.9, 2272.7], "total": "37:52.7", "rank": {"1": 22, "2": 40, "3": 44, "4": 40}}, {"team": "South Harrison Relay A", "school": "South Harrison", "letter": "A", "runners": ["Brennen Myers", "Nathaniel Linger", "Noah Aspy", "Ian Welch"], "legs": ["8:55.6", "9:17.0", "9:58.7", "9:44.5"], "sec": [535.6, 557.0, 598.7, 584.5], "cum": [535.6, 1092.6, 1691.3, 2275.8], "total": "37:55.9", "rank": {"1": 34, "2": 36, "3": 39, "4": 41}}, {"team": "John Marshall Relay B", "school": "John Marshall", "letter": "B", "runners": ["Lane Icard", "Carter Robbins", "Dominic Potts", "Logan Dalek"], "legs": ["8:56.1", "9:14.1", "9:52.7", "9:54.2"], "sec": [536.1, 554.1, 592.7, 594.2], "cum": [536.1, 1090.2, 1682.9, 2277.1], "total": "37:57.2", "rank": {"1": 35, "2": 35, "3": 36, "4": 42}}, {"team": "Jefferson Relay D", "school": "Jefferson", "letter": "D", "runners": ["Michael Wright", "Easton Purnell", "Gavin Perez", "Lincoln Schriever"], "legs": ["9:13.5", "9:10.5", "9:52.3", "10:02.1"], "sec": [553.5, 550.5, 592.3, 602.1], "cum": [553.5, 1104.0, 1696.3, 2298.4], "total": "38:18.4", "rank": {"1": 44, "2": 42, "3": 42, "4": 43}}, {"team": "Morgantown Relay E", "school": "Morgantown", "letter": "E", "runners": ["Eric Yoon", "Eisa Omar", "Spencer Rosenbaum", "Brady Collins"], "legs": ["9:30.9", "9:31.7", "9:11.9", "10:09.6"], "sec": [570.9, 571.7, 551.9, 609.6], "cum": [570.9, 1142.6, 1694.5, 2304.1], "total": "38:24.1", "rank": {"1": 53, "2": 49, "3": 41, "4": 44}}, {"team": "Musselman Relay B", "school": "Musselman", "letter": "B", "runners": ["Dylan Grose", "Greyson McDonald", "James Sweigart", "Braylan Valdez"], "legs": ["9:05.3", "9:10.9", "9:49.9", "10:21.9"], "sec": [545.3, 550.9, 589.9, 621.9], "cum": [545.3, 1096.2, 1686.1, 2308.0], "total": "38:28.0", "rank": {"1": 41, "2": 39, "3": 37, "4": 45}}, {"team": "North Marion Relay B", "school": "North Marion", "letter": "B", "runners": ["Mason Bowers", "Bryson Eddy", "Brycen Serra", "Demarus-Yanez-Aranda"], "legs": ["9:28.7", "9:11.5", "10:04.6", "10:06.5"], "sec": [568.7, 551.5, 604.6, 606.5], "cum": [568.7, 1120.2, 1724.8, 2331.3], "total": "38:51.3", "rank": {"1": 51, "2": 45, "3": 46, "4": 46}}, {"team": "Martinsburg Relay E", "school": "Martinsburg", "letter": "E", "runners": ["Steven Chacon", "Ricky Monroe", "Lochlyn Campbell", "Noah Harding"], "legs": ["9:23.7", "10:32.5", "8:52.0", "10:05.3"], "sec": [563.7, 632.5, 532.0, 605.3], "cum": [563.7, 1196.2, 1728.2, 2333.5], "total": "38:53.6", "rank": {"1": 49, "2": 55, "3": 48, "4": 47}}, {"team": "Fairmont Senior Relay C", "school": "Fairmont Senior", "letter": "C", "runners": ["Elijah DeProspero", "Trevor Knisely", "Kento Gillespie", "Rio Rohaly"], "legs": ["8:58.8", "9:30.0", "9:43.4", "10:54.8"], "sec": [538.8, 570.0, 583.4, 654.8], "cum": [538.8, 1108.8, 1692.2, 2347.0], "total": "39:07.0", "rank": {"1": 38, "2": 43, "3": 40, "4": 48}}, {"team": "Bridgeport Relay C", "school": "Bridgeport", "letter": "C", "runners": ["JT Ritter", "Jeremy Lunsford", "Silas Murphy", "Grady Deleurere"], "legs": ["10:03.6", "9:30.8", "10:05.6", "9:30.7"], "sec": [603.6, 570.8, 605.6, 570.7], "cum": [603.6, 1174.4, 1780.0, 2350.7], "total": "39:10.7", "rank": {"1": 58, "2": 52, "3": 50, "4": 49}}, {"team": "Ritchie County Relay B", "school": "Ritchie County", "letter": "B", "runners": ["Linhang Chen", "Austyn Byrd", "Adley Chesser", "Thackery Workman"], "legs": ["9:16.1", "9:46.3", "10:25.2", "10:01.4"], "sec": [556.1, 586.3, 625.2, 601.4], "cum": [556.1, 1142.4, 1767.6, 2369.0], "total": "39:29.0", "rank": {"1": 46, "2": 48, "3": 49, "4": 50}}, {"team": "Weir Relay A", "school": "Weir", "letter": "A", "runners": ["Jonathan Rhoades", "Tyee Barish", "Jacob MacGregor", "Stephen Young"], "legs": ["9:20.9", "10:19.3", "10:09.8", "9:48.8"], "sec": [560.9, 619.3, 609.8, 588.8], "cum": [560.9, 1180.2, 1790.0, 2378.8], "total": "39:38.7", "rank": {"1": 48, "2": 54, "3": 52, "4": 51}}, {"team": "Heritage Christian Relay B", "school": "Heritage Christian", "letter": "B", "runners": ["Kyler Huffman", "Vaughn Bryant", "Christian Ware", "Joe Ware"], "legs": ["9:27.2", "9:53.8", "11:10.1", "9:35.0"], "sec": [567.2, 593.8, 670.1, 575.0], "cum": [567.2, 1161.0, 1831.1, 2406.1], "total": "40:06.1", "rank": {"1": 50, "2": 50, "3": 54, "4": 52}}, {"team": "Lewis County Relay B", "school": "Lewis County", "letter": "B", "runners": ["Lincoln Roane", "Lincoln Darnall", "Noah Heater", "Landon Roane"], "legs": ["9:53.0", "10:34.8", "10:23.7", "9:38.3"], "sec": [593.0, 634.8, 623.7, 578.3], "cum": [593.0, 1227.8, 1851.5, 2429.8], "total": "40:29.9", "rank": {"1": 57, "2": 56, "3": 56, "4": 53}}, {"team": "Grafton Relay C", "school": "Grafton", "letter": "C", "runners": ["Mason Nestor", "John Gouzd", "Hoyt Glass", "Owen Nestor"], "legs": ["9:37.5", "10:00.1", "10:34.2", "10:24.2"], "sec": [577.5, 600.1, 634.2, 624.2], "cum": [577.5, 1177.6, 1811.8, 2436.0], "total": "40:36.0", "rank": {"1": 56, "2": 53, "3": 53, "4": 54}}, {"team": "Tucker County Relay A", "school": "Tucker County", "letter": "A", "runners": ["Landon Wilfong", "Liam Gilligan", "Evan Spencer", "Draven Bunnell"], "legs": ["8:49.3", "8:53.1", "13:40.1", "9:37.7"], "sec": [529.3, 533.1, 820.1, 577.7], "cum": [529.3, 1062.4, 1882.5, 2460.2], "total": "41:00.1", "rank": {"1": 32, "2": 31, "3": 57, "4": 55}}, {"team": "Martinsburg Relay C", "school": "Martinsburg", "letter": "C", "runners": ["Noah Milburn", "Jonah Mullenax", "Carson Sherman", "Adrian Pena"], "legs": ["9:33.1", "9:59.0", "10:17.8", "12:43.6"], "sec": [573.1, 599.0, 617.8, 763.6], "cum": [573.1, 1172.1, 1789.9, 2553.5], "total": "42:33.5", "rank": {"1": 54, "2": 51, "3": 51, "4": 56}}, {"team": "Martinsburg Relay D", "school": "Martinsburg", "letter": "D", "runners": ["Samuel Smith", "Kilian Jackson", "Jacob Lemaster", "Jack Assmussen"], "legs": ["9:14.5", "11:24.8", "9:54.3", "12:02.8"], "sec": [554.5, 684.8, 594.3, 722.8], "cum": [554.5, 1239.3, 1833.6, 2556.4], "total": "42:36.4", "rank": {"1": 45, "2": 60, "3": 55, "4": 57}}, {"team": "Lincoln Relay B", "school": "Lincoln", "letter": "B", "runners": ["Christopher Napper", "Alex Stewart", "Seth Titus", "Nathan Napper"], "legs": ["10:12.6", "10:20.1", "11:33.2", "10:32.8"], "sec": [612.6, 620.1, 693.2, 632.8], "cum": [612.6, 1232.7, 1925.9, 2558.7], "total": "42:38.7", "rank": {"1": 59, "2": 58, "3": 59, "4": 58}}, {"team": "North Marion Relay C", "school": "North Marion", "letter": "C", "runners": ["Roman Casuccio", "Carter Sine", "Jay Degnegaard", "Roy Fridley"], "legs": ["10:19.9", "10:17.8", "11:17.4", "11:41.1"], "sec": [619.9, 617.8, 677.4, 701.1], "cum": [619.9, 1237.7, 1915.1, 2616.2], "total": "43:36.1", "rank": {"1": 60, "2": 59, "3": 58, "4": 59}}, {"team": "Buckhannon Upshur Relay B", "school": "Buckhannon Upshur", "letter": "B", "runners": ["Mason Conway", "Grayson Colburn", "Landon Beaudry", "Sabastian Rosencrance"], "legs": ["9:35.2", "10:55.6", "14:40.4", "9:51.9"], "sec": [575.2, 655.6, 880.4, 591.9], "cum": [575.2, 1230.8, 2111.2, 2703.1], "total": "45:03.2", "rank": {"1": 55, "2": 57, "3": 60, "4": 60}}]</script>
+<script id="data-girls" type="application/json">[{"team": "Morgantown Relay A", "school": "Morgantown", "letter": "A", "runners": ["Leyland Phillips", "Lauren Hawkins", "Jenna Conaway", "Allison Hawkins"], "legs": ["8:40.1", "9:07.7", "9:07.6", "8:40.3"], "sec": [520.1, 547.7, 547.6, 520.3], "cum": [520.1, 1067.8, 1615.4, 2135.7], "total": "35:35.7", "rank": {"1": 2, "2": 1, "3": 1, "4": 1}}, {"team": "Elkins Relay A", "school": "Elkins", "letter": "A", "runners": ["Julia Biola", "Clara Pyles", "Molly McFadden", "Emilia Tenney"], "legs": ["8:47.6", "9:13.6", "9:31.7", "9:04.1"], "sec": [527.6, 553.6, 571.7, 544.1], "cum": [527.6, 1081.2, 1652.9, 2197.0], "total": "36:36.9", "rank": {"1": 5, "2": 2, "3": 3, "4": 2}}, {"team": "University Relay A", "school": "University", "letter": "A", "runners": ["Abby Rogers", "Cara Zundell", "Rosalia Biundo", "Shae Hopkins"], "legs": ["8:41.0", "9:21.3", "9:21.9", "9:29.8"], "sec": [521.0, 561.3, 561.9, 569.8], "cum": [521.0, 1082.3, 1644.2, 2214.0], "total": "36:54.0", "rank": {"1": 3, "2": 3, "3": 2, "4": 3}}, {"team": "Morgantown Relay B", "school": "Morgantown", "letter": "B", "runners": ["Tumaini Yawe", "Megyn Amsler", "Ryleigh Freshour", "Kylie Cline"], "legs": ["9:03.3", "9:13.3", "9:49.9", "9:22.4"], "sec": [543.3, 553.3, 589.9, 562.4], "cum": [543.3, 1096.6, 1686.5, 2248.9], "total": "37:28.9", "rank": {"1": 8, "2": 5, "3": 5, "4": 4}}, {"team": "Preston Relay A", "school": "Preston", "letter": "A", "runners": ["Ava Simmons", "Delaney Seese", "Taylor Grose", "Zoey Borgman"], "legs": ["9:27.2", "9:38.1", "9:24.6", "9:36.4"], "sec": [567.2, 578.1, 564.6, 576.4], "cum": [567.2, 1145.3, 1709.9, 2286.3], "total": "38:06.3", "rank": {"1": 13, "2": 9, "3": 6, "4": 5}}, {"team": "Bridgeport Relay A", "school": "Bridgeport", "letter": "A", "runners": ["Aria Selario", "Isla Tobrey", "Riley Cheatham", "Beth Dankiewicz"], "legs": ["8:48.9", "9:30.4", "10:25.4", "9:49.3"], "sec": [528.9, 570.4, 625.4, 589.3], "cum": [528.9, 1099.3, 1724.7, 2314.0], "total": "38:34.0", "rank": {"1": 6, "2": 6, "3": 7, "4": 6}}, {"team": "Lincoln Relay A", "school": "Lincoln", "letter": "A", "runners": ["Raley Cochran", "Adalynn Milnes", "Samantha Fitch", "Kennedy Linville"], "legs": ["8:45.3", "9:20.5", "9:49.6", "10:46.8"], "sec": [525.3, 560.5, 589.6, 646.8], "cum": [525.3, 1085.8, 1675.4, 2322.2], "total": "38:42.2", "rank": {"1": 4, "2": 4, "3": 4, "4": 7}}, {"team": "Musselman Relay A", "school": "Musselman", "letter": "A", "runners": ["Olivia Alexander", "Kaylee Kruger", "Sienna Dunbar", "Sadie Yates"], "legs": ["10:03.6", "10:46.8", "10:20.1", "8:37.9"], "sec": [603.6, 646.8, 620.1, 517.9], "cum": [603.6, 1250.4, 1870.5, 2388.4], "total": "39:48.3", "rank": {"1": 18, "2": 20, "3": 15, "4": 8}}, {"team": "Buckhannon Upshur Relay A", "school": "Buckhannon Upshur", "letter": "A", "runners": ["Isabella Bowers", "Chloe Lewis", "Ella Whitehair", "Gwen Rogosky"], "legs": ["10:05.1", "9:54.6", "10:13.9", "9:51.1"], "sec": [605.1, 594.6, 613.9, 591.1], "cum": [605.1, 1199.7, 1813.6, 2404.7], "total": "40:04.8", "rank": {"1": 20, "2": 14, "3": 10, "4": 9}}, {"team": "Preston Relay B", "school": "Preston", "letter": "B", "runners": ["Evie Durst", "Miranda Poe", "Ayla Fasouletos", "Eileen Parks"], "legs": ["9:46.5", "10:11.5", "10:04.5", "10:05.3"], "sec": [586.5, 611.5, 604.5, 605.3], "cum": [586.5, 1198.0, 1802.5, 2407.8], "total": "40:07.9", "rank": {"1": 16, "2": 13, "3": 9, "4": 10}}, {"team": "John Marshall Relay A", "school": "John Marshall", "letter": "A", "runners": ["Zoe Zervos", "Kalyn Reese", "Lily Williams", "Gabby Kelly"], "legs": ["8:37.3", "10:03.9", "10:49.8", "11:02.5"], "sec": [517.3, 603.9, 649.8, 662.5], "cum": [517.3, 1121.2, 1771.0, 2433.5], "total": "40:33.4", "rank": {"1": 1, "2": 7, "3": 8, "4": 11}}, {"team": "Jefferson Relay A", "school": "Jefferson", "letter": "A", "runners": ["Elizabeth Riordan", "Harper McCoy", "Grace Joyslin", "Anelise Fragomene"], "legs": ["9:09.2", "9:59.1", "11:16.0", "10:23.0"], "sec": [549.2, 599.1, 676.0, 623.0], "cum": [549.2, 1148.3, 1824.3, 2447.3], "total": "40:47.2", "rank": {"1": 11, "2": 10, "3": 12, "4": 12}}, {"team": "Ritchie County Relay A", "school": "Ritchie County", "letter": "A", "runners": ["Layla Devereux", "Jayden Primm", "Charlee Haddox", "Cassy Hardbarger"], "legs": ["8:55.6", "10:37.0", "11:09.9", "10:52.2"], "sec": [535.6, 637.0, 669.9, 652.2], "cum": [535.6, 1172.6, 1842.5, 2494.7], "total": "41:34.7", "rank": {"1": 7, "2": 11, "3": 13, "4": 13}}, {"team": "Fairmont Senior Relay A", "school": "Fairmont Senior", "letter": "A", "runners": ["Sadie Kirkland", "Sienna Zuchelli", "Zoey Fout", "Brenna Lupton"], "legs": ["9:03.4", "9:57.6", "11:13.1", "11:57.1"], "sec": [543.4, 597.6, 673.1, 717.1], "cum": [543.4, 1141.0, 1814.1, 2531.2], "total": "42:11.3", "rank": {"1": 9, "2": 8, "3": 11, "4": 14}}, {"team": "Keyser Relay A", "school": "Keyser", "letter": "A", "runners": ["Ava Barrick", "Hayleigh Haggerty", "Neva Pritts", "Ainsley Friend"], "legs": ["9:26.5", "11:16.6", "11:12.3", "10:19.5"], "sec": [566.5, 676.6, 672.3, 619.5], "cum": [566.5, 1243.1, 1915.4, 2534.9], "total": "42:14.8", "rank": {"1": 12, "2": 19, "3": 19, "4": 15}}, {"team": "University Relay B", "school": "University", "letter": "B", "runners": ["Sophie Dunn", "Ellery Strager", "Vienna Lisle", "Lillian Mundell"], "legs": ["10:21.2", "10:15.0", "10:37.5", "11:06.9"], "sec": [621.2, 615.0, 637.5, 666.9], "cum": [621.2, 1236.2, 1873.7, 2540.6], "total": "42:20.7", "rank": {"1": 23, "2": 16, "3": 16, "4": 16}}, {"team": "St Marys Relay A", "school": "St Marys", "letter": "A", "runners": ["Anna Bennett", "Maddie Smith", "Mariah Whitlock", "Anna Roush"], "legs": ["9:05.6", "10:34.7", "11:47.3", "11:15.5"], "sec": [545.6, 634.7, 707.3, 675.5], "cum": [545.6, 1180.3, 1887.6, 2563.1], "total": "42:43.1", "rank": {"1": 10, "2": 12, "3": 17, "4": 17}}, {"team": "Washington Relay A", "school": "Washington", "letter": "A", "runners": ["Caeley Trujillo", "Lilly Gerdhardt", "Helena Burns", "Naomi Burgos"], "legs": ["9:40.9", "11:25.8", "10:28.4", "11:26.4"], "sec": [580.9, 685.8, 628.4, 686.4], "cum": [580.9, 1266.7, 1895.1, 2581.5], "total": "43:01.5", "rank": {"1": 14, "2": 23, "3": 18, "4": 18}}, {"team": "Morgantown Relay C", "school": "Morgantown", "letter": "C", "runners": ["Maria Hayes", "Zoey Workman", "Caraline Eberhart", "Lyla Haley"], "legs": ["10:06.0", "10:53.3", "11:36.0", "10:28.3"], "sec": [606.0, 653.3, 696.0, 628.3], "cum": [606.0, 1259.3, 1955.3, 2583.6], "total": "43:03.7", "rank": {"1": 21, "2": 22, "3": 22, "4": 19}}, {"team": "Grafton Relay A", "school": "Grafton", "letter": "A", "runners": ["Gwyn Proctor", "Lexi Mlinarcik", "Ruthie Horne", "Ainsley Alexander"], "legs": ["10:07.6", "10:35.0", "11:20.8", "11:04.2"], "sec": [607.6, 635.0, 680.8, 664.2], "cum": [607.6, 1242.6, 1923.4, 2587.6], "total": "43:07.6", "rank": {"1": 22, "2": 18, "3": 20, "4": 20}}, {"team": "East Fairmont Relay A", "school": "East Fairmont", "letter": "A", "runners": ["Anna Wycoff", "Lily Stuck", "Ryleigh Bills", "Linsey Kramer"], "legs": ["10:59.9", "10:59.9", "11:08.7", "10:12.1"], "sec": [659.9, 659.9, 668.7, 612.1], "cum": [659.9, 1319.8, 1988.5, 2600.6], "total": "43:20.7", "rank": {"1": 30, "2": 26, "3": 26, "4": 21}}, {"team": "Elkins Relay B", "school": "Elkins", "letter": "B", "runners": ["Haley Kelley", "Willow Tallman", "Flora Perkins", "Sarah Lipscomb"], "legs": ["9:44.5", "10:39.4", "10:40.4", "12:27.0"], "sec": [584.5, 639.4, 640.4, 747.0], "cum": [584.5, 1223.9, 1864.3, 2611.3], "total": "43:31.4", "rank": {"1": 15, "2": 15, "3": 14, "4": 22}}, {"team": "Heritage Christian Relay A", "school": "Heritage Christian", "letter": "A", "runners": ["Layla Findley", "Christina Bump", "Briella Bump", "Corinne Heldreth"], "legs": ["10:01.2", "10:56.6", "11:53.7", "10:59.1"], "sec": [601.2, 656.6, 713.7, 659.1], "cum": [601.2, 1257.8, 1971.5, 2630.6], "total": "43:50.6", "rank": {"1": 17, "2": 21, "3": 24, "4": 23}}, {"team": "Preston Relay C", "school": "Preston", "letter": "C", "runners": ["Payton Wagner", "Klara Hofer", "Coleen Hart", "Elaina Upole"], "legs": ["10:04.2", "10:35.8", "11:27.0", "11:47.4"], "sec": [604.2, 635.8, 687.0, 707.4], "cum": [604.2, 1240.0, 1927.0, 2634.4], "total": "43:54.5", "rank": {"1": 19, "2": 17, "3": 21, "4": 24}}, {"team": "Bridgeport Relay B", "school": "Bridgeport", "letter": "B", "runners": ["Liana Rajjoub", "Gemma Bonnell", "Chloe Witt", "Zoe Kirksey"], "legs": ["10:41.2", "11:03.9", "10:58.2", "11:12.7"], "sec": [641.2, 663.9, 658.2, 672.7], "cum": [641.2, 1305.1, 1963.3, 2636.0], "total": "43:56.0", "rank": {"1": 26, "2": 25, "3": 23, "4": 25}}, {"team": "Buckhannon Upshur Relay B", "school": "Buckhannon Upshur", "letter": "B", "runners": ["Haleigh Skidmore", "Adah Poddey", "Angelina Winter", "Emma Whitley"], "legs": ["10:57.9", "11:12.0", "10:51.8", "11:31.1"], "sec": [657.9, 672.0, 651.8, 691.1], "cum": [657.9, 1329.9, 1981.7, 2672.8], "total": "44:32.8", "rank": {"1": 29, "2": 27, "3": 25, "4": 26}}, {"team": "Martinsburg Relay A", "school": "Martinsburg", "letter": "A", "runners": ["Brianna Gutierrez", "Meagan Brunk", "Gabriella Escobar", "Olivia Campbell"], "legs": ["11:23.4", "11:25.1", "11:57.1", "10:37.1"], "sec": [683.4, 685.1, 717.1, 637.1], "cum": [683.4, 1368.5, 2085.6, 2722.7], "total": "45:22.7", "rank": {"1": 34, "2": 31, "3": 28, "4": 27}}, {"team": "North Marion Relay A", "school": "North Marion", "letter": "A", "runners": ["Annabelle Todd", "Brooklynn Talkington", "Ella Gerrard", "Kinlei Birdsell"], "legs": ["10:52.3", "11:33.5", "11:05.4", "12:31.7"], "sec": [652.3, 693.5, 665.4, 751.7], "cum": [652.3, 1345.8, 2011.2, 2762.9], "total": "46:02.9", "rank": {"1": 27, "2": 28, "3": 27, "4": 28}}, {"team": "Buckhannon Upshur Relay C", "school": "Buckhannon Upshur", "letter": "C", "runners": ["Kolbi Orr", "Estrid Garver-Daniels", "Alaina Tenney", "Anya Morehead"], "legs": ["11:44.1", "12:25.1", "11:18.8", "11:19.6"], "sec": [704.1, 745.1, 678.8, 679.6], "cum": [704.1, 1449.2, 2128.0, 2807.6], "total": "46:47.6", "rank": {"1": 37, "2": 38, "3": 33, "4": 29}}, {"team": "Hampshire Relay A", "school": "Hampshire", "letter": "A", "runners": ["Alivia Dice", "Makayla Orndoff", "Sawyer Nichols", "Haley Benson"], "legs": ["11:19.8", "12:08.8", "11:33.4", "12:03.8"], "sec": [679.8, 728.8, 693.4, 723.8], "cum": [679.8, 1408.6, 2102.0, 2825.8], "total": "47:05.9", "rank": {"1": 33, "2": 34, "3": 29, "4": 30}}, {"team": "Washington Relay B", "school": "Washington", "letter": "B", "runners": ["Kelly McCarthy", "Bristol Robertson", "Amelia Anderson", "Sophia Slimp"], "legs": ["10:39.3", "11:56.1", "12:33.7", "12:01.2"], "sec": [639.3, 716.1, 753.7, 721.2], "cum": [639.3, 1355.4, 2109.1, 2830.3], "total": "47:10.4", "rank": {"1": 25, "2": 29, "3": 30, "4": 31}}, {"team": "Bridgeport Relay C", "school": "Bridgeport", "letter": "C", "runners": ["Amber Vincent", "Sophie Mazza", "Gwen McCollam", "Abby Mills"], "legs": ["11:33.1", "12:45.6", "11:14.5", "11:47.6"], "sec": [693.1, 765.6, 674.5, 707.6], "cum": [693.1, 1458.7, 2133.2, 2840.8], "total": "47:20.8", "rank": {"1": 35, "2": 40, "3": 35, "4": 32}}, {"team": "John Marshall Relay B", "school": "John Marshall", "letter": "B", "runners": ["Liberty Cuffaro", "Harmony Goddard", "Lexi Etzel", "Trinity Rose"], "legs": ["11:48.9", "12:04.1", "12:06.4", "11:38.0"], "sec": [708.9, 724.1, 726.4, 698.0], "cum": [708.9, 1433.0, 2159.4, 2857.4], "total": "47:37.4", "rank": {"1": 40, "2": 37, "3": 36, "4": 33}}, {"team": "Jefferson Relay B", "school": "Jefferson", "letter": "B", "runners": ["Isla Bartosevich", "Martina Hall", "Taylor Stull", "Audrey Milner"], "legs": ["11:43.0", "11:53.0", "11:50.2", "12:30.0"], "sec": [703.0, 713.0, 710.2, 750.0], "cum": [703.0, 1416.0, 2126.2, 2876.2], "total": "47:56.2", "rank": {"1": 36, "2": 35, "3": 32, "4": 34}}, {"team": "Doddridge County Relay A", "school": "Doddridge County", "letter": "A", "runners": ["Emily Cottrill", "Amelia Weekley", "Marley Sias", "Abby James"], "legs": ["10:55.7", "11:48.0", "12:41.6", "12:46.9"], "sec": [655.7, 708.0, 761.6, 766.9], "cum": [655.7, 1363.7, 2125.3, 2892.2], "total": "48:12.3", "rank": {"1": 28, "2": 30, "3": 31, "4": 35}}, {"team": "Ritchie County Relay B", "school": "Ritchie County", "letter": "B", "runners": ["Olivia Devereux", "Josie Barr", "Taylor Krolick", "Caycee Bartlett"], "legs": ["11:45.4", "11:27.6", "12:15.8", "12:49.6"], "sec": [705.4, 687.6, 735.8, 769.6], "cum": [705.4, 1393.0, 2128.8, 2898.4], "total": "48:18.5", "rank": {"1": 38, "2": 32, "3": 34, "4": 36}}, {"team": "St Marys Relay B", "school": "St Marys", "letter": "B", "runners": ["Sidni Gerlach", "Avry Bennett", "Reagan Sturgeon", "Savana Burd"], "legs": ["11:17.3", "12:30.1", "14:19.9", "10:31.9"], "sec": [677.3, 750.1, 859.9, 631.9], "cum": [677.3, 1427.4, 2287.3, 2919.2], "total": "48:39.1", "rank": {"1": 31, "2": 36, "3": 41, "4": 37}}, {"team": "Fairmont Senior Relay B", "school": "Fairmont Senior", "letter": "B", "runners": ["Charley Speicher", "Risha Stivers", "Talia Olivito", "Jenna Watson"], "legs": ["11:17.4", "11:56.3", "13:04.6", "12:30.3"], "sec": [677.4, 716.3, 784.6, 750.3], "cum": [677.4, 1393.7, 2178.3, 2928.6], "total": "48:48.7", "rank": {"1": 32, "2": 33, "3": 37, "4": 38}}, {"team": "Musselman Relay B", "school": "Musselman", "letter": "B", "runners": ["Jasmine Marks", "Allison Stone", "Adriennne Sigler", "Makenna Lesser"], "legs": ["12:00.7", "13:14.8", "12:22.5", "11:26.2"], "sec": [720.7, 794.8, 742.5, 686.2], "cum": [720.7, 1515.5, 2258.0, 2944.2], "total": "49:04.2", "rank": {"1": 41, "2": 42, "3": 40, "4": 39}}, {"team": "East Fairmont Relay B", "school": "East Fairmont", "letter": "B", "runners": ["Emma Ice", "Kelcie Criss", "Emma Stewart", "Shayla Wotring"], "legs": ["11:47.2", "12:25.0", "12:59.2", "11:58.5"], "sec": [707.2, 745.0, 779.2, 718.5], "cum": [707.2, 1452.2, 2231.4, 2949.9], "total": "49:09.9", "rank": {"1": 39, "2": 39, "3": 39, "4": 40}}, {"team": "Webster County Relay A", "school": "Webster County", "letter": "A", "runners": ["Sydney Adkison", "Riley Williams", "Izzy Hinely", "Sophie Skidmore"], "legs": ["10:24.1", "10:59.9", "18:34.5", "10:19.1"], "sec": [624.1, 659.9, 1114.5, 619.1], "cum": [624.1, 1284.0, 2398.5, 3017.6], "total": "50:17.6", "rank": {"1": 24, "2": 24, "3": 43, "4": 41}}, {"team": "Musselman Relay C", "school": "Musselman", "letter": "C", "runners": ["Emma Kitzmiller", "Faith McDonald", "Kayla Weber", "Amelia Sturm"], "legs": ["13:17.3", "13:13.5", "12:47.9", "13:53.4"], "sec": [797.3, 793.5, 767.9, 833.4], "cum": [797.3, 1590.8, 2358.7, 3192.1], "total": "53:12.1", "rank": {"1": 43, "2": 43, "3": 42, "4": 42}}, {"team": "Keyser Relay B", "school": "Keyser", "letter": "B", "runners": ["Chloe Leatherman", "Desiree Wilson", "Evelyn Cole", "Izzy Lindeman"], "legs": ["12:18.4", "12:29.1", "12:17.8", "16:24.0"], "sec": [738.4, 749.1, 737.8, 984.0], "cum": [738.4, 1487.5, 2225.3, 3209.3], "total": "53:29.3", "rank": {"1": 42, "2": 41, "3": 38, "4": 43}}, {"team": "Martinsburg Relay B", "school": "Martinsburg", "letter": "B", "runners": ["Evelynn Sanita", "Luna Sauls", "Ann Fishel", "Adalyn Alter"], "legs": ["14:35.4", "13:19.9", "14:32.5", "12:46.5"], "sec": [875.4, 799.9, 872.5, 766.5], "cum": [875.4, 1675.3, 2547.8, 3314.3], "total": "55:14.3", "rank": {"1": 44, "2": 44, "3": 44, "4": 44}}]</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const DATASETS = {
+  boys:  JSON.parse(document.getElementById('data-boys').textContent),
+  girls: JSON.parse(document.getElementById('data-girls').textContent)
+};
+const STAGES = ['After Leg 1','After Leg 2','After Leg 3','Final'];
+const short = t => t.school + ' ' + t.letter;
+const fmt = s => { const m=Math.floor(s/60); return m+':'+(s-60*m).toFixed(1).padStart(4,'0'); };
+
+// ---- light / dark toggle (defaults to the system setting, remembers the choice) ----
+const _root=document.documentElement, _themeBtn=document.getElementById('theme');
+function _tstore(v){ try{ localStorage.setItem('knt-theme',v); }catch(e){} }
+function _tread(){ try{ return localStorage.getItem('knt-theme'); }catch(e){ return null; } }
+let _theme=_tread();
+function _cur(){ return _theme || (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'); }
+function _applyTheme(){
+  if(_theme) _root.setAttribute('data-theme',_theme); else _root.removeAttribute('data-theme');
+  _themeBtn.textContent = _cur()==='dark' ? '☀︎ Light' : '☾ Dark';
+}
+_themeBtn.addEventListener('click',()=>{ _theme=_cur()==='dark'?'light':'dark'; _tstore(_theme); _applyTheme(); });
+_applyTheme();
+
+// movement bucket by net rank change (leg 1 -> final)
+function bucket(d){ if(d>=8)return'up2'; if(d>=3)return'up1'; if(d<=-8)return'dn2'; if(d<=-3)return'dn1'; return'steady'; }
+const COLORVAR={up2:'--up2',up1:'--up1',steady:'--steady',dn1:'--dn1',dn2:'--dn2'};
+const color = b => `var(${COLORVAR[b]})`;
+const LEGEND=[['up2','Climbed ≥ 8'],['up1','Climbed 3–7'],['steady','Held ±2'],['dn1','Slid 3–7'],['dn2','Slid ≥ 8']];
+for(const g of ['boys','girls']) DATASETS[g].forEach(t=>{ t.delta=t.rank['1']-t.rank['4']; t.bucket=bucket(t.delta); });
+
+// ---- shared refs & state ----
+const svg=d3.select('#svg'), tt=d3.select('#tt'), sel=d3.select('#school');
+const M={t:52,b:22,l:150,r:180}, rowH=12, W=980;
+let DATA, N, x, y, line, teams, gender='boys', pin=null, clipRect, playing=false;
+let speed=1, playTimers=[];
+const bucketSel=new Set();              // empty = show all; otherwise spotlight these buckets
+function clearTimers(){ playTimers.forEach(t=>t.stop&&t.stop()); playTimers=[]; }
+
+// ---- legend: click a chip to SPOTLIGHT that movement group ----
+d3.select('#legend').selectAll('span.lg').data(LEGEND).join('span').attr('class','lg')
+  .attr('data-b',([b])=>b)
+  .html(([b,label])=>`<span class="sw" style="background:${color(b)}"></span>${label}`)
+  .on('click',(e,[b])=>{ if(bucketSel.has(b)) bucketSel.delete(b); else bucketSel.add(b); updateLegend(); applyFilter(); });
+function updateLegend(){
+  const any=bucketSel.size>0;
+  d3.selectAll('#legend .lg').each(function(d){
+    const on=bucketSel.has(d[0]);
+    d3.select(this).classed('sel',on).classed('off',any && !on);
+  });
+}
+
+// ---- build/rebuild the chart for a gender ----
+function build(g){
+  gender=g; DATA=DATASETS[g]; N=DATA.length; pin=null; bucketSel.clear(); playing=false; clearTimers();
+  sel.property('value',''); updateLegend();
+  d3.select('#play').property('disabled',false).text('▶ Play');
+
+  // stats + tiles
+  const fastest=DATA[0], climber=d3.greatest(DATA,d=>d.delta), faller=d3.least(DATA,d=>d.delta);
+  const schools=[...new Set(DATA.map(t=>t.school))];
+  d3.select('#meta').text(`${g==='boys'?'Boys':'Girls'} · ${N} complete teams · ${schools.length} schools · 4 legs of 1.5 miles each`);
+  const tiles=[
+    ['Complete teams', N, 'each with 4 finishers', ''],
+    ['Fastest team', fastest.total, short(fastest), ''],
+    ['Biggest climber', '+'+climber.delta, `${short(climber)} · #${climber.rank['1']}→#${climber.rank['4']}`, 'up'],
+    ['Biggest slide', faller.delta, `${short(faller)} · #${faller.rank['1']}→#${faller.rank['4']}`, 'dn'],
+  ];
+  d3.select('#tiles').selectAll('div.tile').data(tiles).join('div').attr('class','tile')
+    .html(([k,v,d,c])=>`<span class="k">${k}</span><span class="v ${c}">${v}</span><span class="d">${d}</span>`);
+
+  // school select
+  sel.selectAll('option.sch').remove();
+  sel.selectAll('option.sch').data(schools.slice().sort()).join('option')
+    .attr('class','sch').attr('value',s=>s).text(s=>s);
+
+  // scales
+  const H=M.t+N*rowH+M.b;
+  x=d3.scalePoint().domain(d3.range(4)).range([M.l,W-M.r]);
+  y=d3.scaleLinear().domain([1,N]).range([M.t+rowH/2, H-M.b-rowH/2]);
+  line=d3.line().x(d=>x(d.i)).y(d=>y(d.rank)).curve(d3.curveBumpX);
+  svg.attr('viewBox',`0 0 ${W} ${H}`); svg.selectAll('*').remove();
+
+  // reveal mask used by the Play sweep (full width = everything visible at rest)
+  clipRect=svg.append('defs').append('clipPath').attr('id','reveal').append('rect')
+    .attr('x',0).attr('y',0).attr('width',W).attr('height',H);
+
+  // stage guides + labels (the track — always visible, not swept)
+  const stage=svg.selectAll('g.stage').data(STAGES).join('g').attr('class','stage');
+  stage.append('line').attr('class','glide').attr('x1',(d,i)=>x(i)).attr('x2',(d,i)=>x(i)).attr('y1',M.t-8).attr('y2',H-M.b);
+  stage.append('text').attr('class','stagelab').attr('text-anchor','middle').attr('x',(d,i)=>x(i)).attr('y',26).text(d=>d);
+  stage.append('text').attr('class','stagesub').attr('text-anchor','middle').attr('x',(d,i)=>x(i)).attr('y',39)
+    .text((d,i)=>i<3?`legs 1–${i+1}`:'all 4 legs');
+
+  // ribbons live in a clipped group so Play can sweep them in left→right
+  const gTeams=svg.append('g').attr('clip-path','url(#reveal)');
+  teams=gTeams.selectAll('g.team').data(DATA,d=>d.team).join('g').attr('class','team')
+    .on('mouseenter',(e,d)=>{ if(!pin && !playing){ tt.html(tipHTML(d)).style('opacity',1); moveTT(e); setHot(d);} })
+    .on('mousemove',moveTT)
+    .on('mouseleave',()=>{ if(!pin && !playing){ tt.style('opacity',0); applyFilter(); } })
+    .on('click',(e,d)=>{ if(playing) return; e.stopPropagation(); pin=(pin===d)?null:d; applyFilter(); });
+
+  teams.append('path').attr('class','rb').attr('stroke',d=>color(d.bucket))
+    .attr('d',d=>line([0,1,2,3].map(i=>({i,rank:d.rank[String(i+1)]}))));
+  teams.selectAll('rect.node').data(d=>[0,1,2,3].map(i=>({i,rank:d.rank[String(i+1)],b:d.bucket}))).join('rect')
+    .attr('class','node').attr('x',d=>x(d.i)-6).attr('y',d=>y(d.rank)-3.5).attr('width',12).attr('height',7).attr('rx',2.5)
+    .attr('fill',d=>color(d.b));
+  teams.append('text').attr('class','endlab left').attr('x',x(0)-11).attr('y',d=>y(d.rank['1'])+3)
+    .html(d=>`<tspan class="rk">${d.rank['1']}</tspan>  ${short(d)}`);
+  teams.append('text').attr('class','endlab right').attr('x',x(3)+11).attr('y',d=>y(d.rank['4'])+3)
+    .html(d=>`<tspan class="rk">${d.rank['4']}</tspan>  ${short(d)}  ${d.total}`);
+
+  // reset table
+  const th=d3.select('#tablehost'); th.property('hidden',true).attr('data-built',null).html('');
+  d3.select('#toggleTable').attr('aria-expanded','false').text('Show leg-by-leg heatmap');
+
+  d3.select('#foot').html(
+    `Vertical position = the team's rank by cumulative time at that point in the race (1 = fastest, top). Ribbon color encodes net movement from the Leg&nbsp;1 order to the finish. `+
+    `Only the ${N} ${gender} teams that fielded four finishers are shown; incomplete and DNF relays are excluded. Built with D3.js. 2026 Knight Night Relays, Preston High School.`);
+
+  applyFilter();
+}
+
+// ---- tooltip + highlight ----
+function tipHTML(t){
+  let rows='';
+  for(let i=0;i<4;i++)
+    rows+=`<div class="tt-row"><span class="st">${['Leg 1','Leg 2','Leg 3','Final'][i]}</span>`+
+      `<span class="rk">#${t.rank[String(i+1)]}</span><span class="cu">${fmt(t.cum[i])}</span></div>`;
+  const d=t.delta, mv=d>0?`▲ climbed ${d}`:d<0?`▼ slid ${-d}`:'▬ held position';
+  const mc=d>0?'var(--up2)':d<0?'var(--dn2)':'var(--sec)';
+  const last=t.runners.map(r=>r.split(' ').slice(-1)[0]).join(', ');
+  return `<div class="tt-team">${short(t)}</div><div class="tt-school">${t.school} · leg order: ${last}</div>`+
+    rows+`<div class="tt-move" style="color:${mc}">${mv} · finished ${t.total}</div>`;
+}
+function moveTT(e){ if(playing) return; const pad=14,w=tt.node().offsetWidth,h=tt.node().offsetHeight;
+  let px=e.clientX+pad,py=e.clientY+pad;
+  if(px+w>innerWidth-8)px=e.clientX-w-pad; if(py+h>innerHeight-8)py=e.clientY-h-pad;
+  tt.style('left',px+'px').style('top',Math.max(8,py)+'px'); }
+function setHot(t){ teams.classed('hot',d=>d===t).classed('dim',d=>d!==t)
+  .filter(d=>d===t).each(function(){ this.parentNode.appendChild(this); }); }
+
+function applyFilter(){
+  const sch=sel.property('value'), anyBucket=bucketSel.size>0;
+  if(pin){ tt.html(tipHTML(pin)).style('opacity',1);
+    const r=svg.node().getBoundingClientRect();
+    tt.style('left',Math.min(innerWidth-tt.node().offsetWidth-8, r.right-260)+'px').style('top',Math.max(8,r.top+14)+'px');
+  } else if(!sch && !anyBucket){ tt.style('opacity',0); }
+  teams.each(function(d){
+    const show=(!sch||d.school===sch) && (!anyBucket||bucketSel.has(d.bucket)) && (!pin||d===pin);
+    d3.select(this).classed('dim',!show).classed('hot', !!pin && d===pin);
+  });
+  if(pin) teams.filter(d=>d===pin).each(function(){ this.parentNode.appendChild(this); });
+}
+
+// ---- controls ----
+d3.selectAll('#gender button').on('click',function(){
+  const g=this.dataset.g; if(g===gender) return;
+  d3.selectAll('#gender button').classed('on',function(){ return this.dataset.g===g; });
+  build(g);
+});
+sel.on('change',()=>{ pin=null; applyFilter(); });
+d3.select('#clear').on('click',()=>{ pin=null; sel.property('value',''); bucketSel.clear(); updateLegend(); applyFilter(); });
+svg.on('click',()=>{ pin=null; applyFilter(); });
+// Clear a stuck hover (tooltip + highlight) when the pointer leaves the chart or the window.
+function clearHover(){ if(pin) return; tt.style('opacity',0); applyFilter(); }
+svg.on('pointerleave', clearHover);
+window.addEventListener('blur', clearHover);
+document.addEventListener('mouseout', e=>{ if(!e.relatedTarget && !e.toElement) clearHover(); });
+
+// ---- Play: ink the ACTIVE ribbons along their path; a pinned team / selected school / movement chip plays over the static, grayed-out field ----
+function play(){
+  if(playing || !teams) return;
+  playing=true;
+  tt.style('opacity',0); clearTimers();
+  const dur=4000/speed;
+  d3.select('#play').property('disabled',true).text('Drawing…');
+
+  // scope of what animates: a pinned team wins, else the school + movement filter, else the whole field
+  const sch=sel.property('value'), anyBucket=bucketSel.size>0;
+  const target = pin ? (d=>d===pin) : (d=>(!sch||d.school===sch)&&(!anyBucket||bucketSel.has(d.bucket)));
+  const isSubset = !!pin || !!sch || anyBucket;
+  const targets=teams.filter(d=>target(d));
+
+  // set the static field: gray out everyone outside the focus (only when there IS a focus)
+  teams.classed('dim', d=> isSubset && !target(d)).classed('hot', false);
+  targets.each(function(){ this.parentNode.appendChild(this); });   // draw on top of the grayed field
+
+  // hide only the active teams' marks; the dimmed field is left exactly as it is
+  targets.selectAll('rect.node').interrupt().style('opacity',0);
+  targets.selectAll('text.endlab.right').interrupt().style('opacity',0);
+  targets.selectAll('text.endlab.left').interrupt().style('opacity',0)
+    .transition().delay(120).duration(300).style('opacity',null);
+
+  // draw each active ribbon by releasing its stroke-dash — the round cap reads as a pen tip tracing the line
+  targets.select('path.rb').each(function(){
+    const L=this.getTotalLength();
+    d3.select(this).interrupt()
+      .attr('stroke-dasharray',L).attr('stroke-dashoffset',L)
+      .transition().duration(dur).ease(d3.easeLinear).attr('stroke-dashoffset',0)
+      .on('end',function(){ d3.select(this).attr('stroke-dasharray',null).attr('stroke-dashoffset',null); });
+  });
+
+  // pop the active teams' nodes as the ink tip reaches each leg; reveal their finish labels at the end
+  for(let i=0;i<4;i++) playTimers.push(d3.timeout(()=>pulseStage(i,targets), (x(i)/W)*dur));
+  playTimers.push(d3.timeout(()=>{
+    targets.selectAll('text.endlab.right').transition().duration(320).style('opacity',null);
+    playing=false; d3.select('#play').property('disabled',false).text('↻ Replay');
+    applyFilter();                         // restore the resting highlight/dim/tooltip state
+  }, dur+20));
+}
+function pulseStage(i,targets){
+  // flash the leg header as the ink crosses it
+  const lab=svg.selectAll('g.stage').filter((d,idx)=>idx===i).select('.stagelab');
+  lab.interrupt().style('fill','var(--accent)');
+  playTimers.push(d3.timeout(()=>lab.style('fill',null), 480));
+  // pop the active teams' nodes in this column as the ink arrives
+  (targets||teams).selectAll('rect.node').filter(d=>d.i===i).interrupt().style('opacity',1)
+    .transition().duration(150).ease(d3.easeQuadOut)
+      .attr('x',d=>x(d.i)-9).attr('y',d=>y(d.rank)-6).attr('width',18).attr('height',12).attr('rx',4)
+    .transition().duration(420).ease(d3.easeCubicIn)
+      .attr('x',d=>x(d.i)-6).attr('y',d=>y(d.rank)-3.5).attr('width',12).attr('height',7).attr('rx',2.5);
+}
+d3.select('#play').on('click',play);
+d3.selectAll('#speed button').on('click',function(){
+  speed=+this.dataset.s;
+  d3.selectAll('#speed button').classed('on',function(){ return +this.dataset.s===speed; });
+});
+// sync the speed buttons to the actual speed value on load (source of truth = `speed`)
+d3.selectAll('#speed button').classed('on',function(){ return +this.dataset.s===speed; });
+
+// A click on the empty page resets the pinned team — but not when using the controls (dropdown, Play, Speed, Clear, legend).
+document.addEventListener('click',e=>{ if(!pin || playing) return; if(e.target.closest('.controls')) return; pin=null; applyFilter(); });
+
+// ---- full results table ----
+d3.select('#toggleTable').on('click',function(){
+  const th=d3.select('#tablehost'); const open=th.property('hidden');
+  th.property('hidden',!open);
+  d3.select(this).attr('aria-expanded',String(open)).text(open?'Hide leg-by-leg heatmap':'Show leg-by-leg heatmap');
+  if(open && !th.attr('data-built')){ buildTable(); th.attr('data-built','1'); }
+});
+// leg-by-leg heatmap: each split shaded by its gap to the field's average split at that leg position
+function buildTable(){
+  const legMean=[0,1,2,3].map(i=>d3.mean(DATA,t=>t.sec[i]));
+  const dev=(t,i)=>t.sec[i]-legMean[i];
+  const absdev=DATA.flatMap(t=>[0,1,2,3].map(i=>Math.abs(dev(t,i)))).sort(d3.ascending);
+  const cap=Math.max(20, d3.quantile(absdev,0.9));        // clamp so one blow-up doesn't wash out the scale
+  const cs=d3.scaleDiverging(d3.interpolateRdBu).domain([cap,0,-cap]).clamp(true);  // blue=faster, red=slower
+  const txt=bg=>d3.lab(bg).l>66?'var(--ink)':'#fff';
+  const rows=DATA.slice().sort((a,b)=>a.rank['4']-b.rank['4']).map(t=>{
+    const cells=[0,1,2,3].map(i=>{ const d=dev(t,i), bg=cs(d);
+      const tip=`${short(t)} · Leg ${i+1} (${t.runners[i]}): ${t.legs[i]} — ${d>0?'+':d<0?'−':''}${Math.abs(d).toFixed(1)}s vs avg`;
+      return `<td class="hcell" style="background:${bg};color:${txt(bg)}" title="${tip}">${t.legs[i]}</td>`; }).join('');
+    return `<tr><th><span class="rk">${t.rank['4']}</span>${short(t)}</th>${cells}<td class="hfin"><b>${t.total}</b></td></tr>`;
+  }).join('');
+  const stops=d3.range(0,1.0001,0.1).map(u=>cs(-cap+2*cap*u)).join(',');
+  d3.select('#tablehost').html(
+    `<div class="hlegend"><span>◄ ${cap.toFixed(0)}s faster</span>`+
+    `<span class="ramp" style="background:linear-gradient(90deg,${stops})"></span>`+
+    `<span>${cap.toFixed(0)}s slower ►</span>`+
+    `<span class="cap2">shading = seconds vs the field's average split at that leg · hover a cell for the runner</span></div>`+
+    `<div class="tblwrap"><table class="heat"><thead><tr><th>Team</th>`+
+    `<th>Leg 1<span class="mi">1.5 mi</span></th><th>Leg 2<span class="mi">1.5 mi</span></th>`+
+    `<th>Leg 3<span class="mi">1.5 mi</span></th><th>Leg 4<span class="mi">1.5 mi</span></th><th>Finish</th></tr></thead>`+
+    `<tbody>${rows}</tbody></table></div>`);
+}
+
+build('boys');
+</script>
+
+</body></html>
