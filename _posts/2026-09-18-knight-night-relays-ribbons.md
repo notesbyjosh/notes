@@ -27,4 +27,4 @@ Only teams that fielded four finishers are shown — 60 boys' teams and 44 girls
 
 It's a single self-contained page: D3.js and both races' data are baked into one HTML file, so there's no login or setup. Built with **Claude (Anthropic)**, which did the PDF data extraction, the rank math, and the design in one pass.
 
-**Data:** 2026 Knight Night Relays official splits, Preston High School.
+**Data:** 2026 Knight Night Relays official splits, Preston High School. Results timing by [mountaintiming.com](https://mountaintiming.com).

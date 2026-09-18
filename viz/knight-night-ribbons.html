@@ -5,29 +5,33 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
   :root{
-    --page:#eef1f5; --surface:#ffffff; --surface-2:#f6f8fb;
-    --ink:#10151c; --sec:#565f6b; --muted:#8a929e;
-    --grid:#e6e9ee; --base:#cfd4dc; --border:rgba(16,21,28,.10);
+    /* Preston Knights — black & silver */
+    --page:#e9eaec; --surface:#ffffff; --surface-2:#f1f2f4;
+    --ink:#14161a; --sec:#4b4f56; --muted:#868b93;
+    --grid:#e2e4e7; --base:#c3c7cc; --border:rgba(20,22,26,.12);
     --up2:#1c5cab; --up1:#5aa0f0; --steady:#a2acba; --dn1:#ef8a5f; --dn2:#d5352f;
-    --accent:#1c5cab;
+    --accent:#2b2f36; --accent-ink:#ffffff;   /* charcoal-black accent, white text on it */
+    --h1a:#26292e; --h1b:#7c828a;              /* brushed-metal title gradient */
     --disp:'Oswald',system-ui,sans-serif;
     --body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --page:#0a0e14; --surface:#121822; --surface-2:#0f151e;
-      --ink:#f1f4f8; --sec:#b7bec9; --muted:#7e8794;
-      --grid:#212934; --base:#323b48; --border:rgba(255,255,255,.12);
+      --page:#0b0c0e; --surface:#15171b; --surface-2:#0f1114;
+      --ink:#f2f3f5; --sec:#b9bdc4; --muted:#7f858d;
+      --grid:#23262b; --base:#33373d; --border:rgba(255,255,255,.13);
       --up2:#4a92e8; --up1:#7bb2f2; --steady:#6f7885; --dn1:#ef8a5f; --dn2:#ea5b56;
-      --accent:#4a92e8;
+      --accent:#c7ccd2; --accent-ink:#14161a;   /* silver accent, black text on it */
+      --h1a:#aeb4bc; --h1b:#ffffff;
     }
   }
   :root[data-theme="dark"]{
-    --page:#0a0e14; --surface:#121822; --surface-2:#0f151e;
-    --ink:#f1f4f8; --sec:#b7bec9; --muted:#7e8794;
-    --grid:#212934; --base:#323b48; --border:rgba(255,255,255,.12);
+    --page:#0b0c0e; --surface:#15171b; --surface-2:#0f1114;
+    --ink:#f2f3f5; --sec:#b9bdc4; --muted:#7f858d;
+    --grid:#23262b; --base:#33373d; --border:rgba(255,255,255,.13);
     --up2:#4a92e8; --up1:#7bb2f2; --steady:#6f7885; --dn1:#ef8a5f; --dn2:#ea5b56;
-    --accent:#4a92e8;
+    --accent:#c7ccd2; --accent-ink:#14161a;
+    --h1a:#aeb4bc; --h1b:#ffffff;
   }
 
   *{box-sizing:border-box}
@@ -37,7 +41,9 @@
   header .eyebrow{font-family:var(--disp);text-transform:uppercase;letter-spacing:.22em;
     font-size:12px;font-weight:600;color:var(--accent);margin:0}
   header h1{font-family:var(--disp);font-weight:600;letter-spacing:.01em;
-    font-size:clamp(30px,6vw,50px);line-height:1.02;margin:.12em 0 .1em;text-wrap:balance}
+    font-size:clamp(30px,6vw,50px);line-height:1.02;margin:.12em 0 .1em;text-wrap:balance;
+    color:var(--ink);background:linear-gradient(176deg,var(--h1a),var(--h1b) 52%,var(--h1a));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
   header .sub{color:var(--sec);font-size:15px;max-width:64ch;margin:0}
   header .meta{color:var(--muted);font-size:12.5px;margin-top:6px}
 
@@ -46,7 +52,7 @@
   .pills button{font-family:var(--disp);font-size:13.5px;font-weight:500;letter-spacing:.05em;
     text-transform:uppercase;padding:8px 26px;border:0;border-radius:22px;background:transparent;
     color:var(--sec);cursor:pointer;transition:background .15s,color .15s}
-  .pills button.on{background:var(--accent);color:#fff}
+  .pills button.on{background:var(--accent);color:var(--accent-ink)}
   .pills button:not(.on):hover{color:var(--ink)}
 
   .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0 18px}
@@ -80,7 +86,7 @@
   .seg button{font-family:var(--body);font-size:12px;padding:6px 11px;background:var(--surface-2);
     color:var(--sec);border:0;border-right:1px solid var(--border);cursor:pointer;font-variant-numeric:tabular-nums}
   .seg button:last-child{border-right:0}
-  .seg button.on{background:var(--accent);color:#fff}
+  .seg button.on{background:var(--accent);color:var(--accent-ink)}
   .hint{font-size:12px;color:var(--muted);margin:2px 2px 10px}
 
   .chartbox{overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -145,7 +151,7 @@
 
 <div class="wrap">
   <header>
-    <p class="eyebrow">Preston High School · Kingwood, WV · 2026</p>
+    <p class="eyebrow">⚔ Preston Knights · Kingwood, WV · 2026</p>
     <h1>Knight Night Relays</h1>
     <p class="sub">How each team's 4&nbsp;×&nbsp;1.5-mile relay rose and fell as every leg was added — ranked by cumulative time after each runner. Toggle boys or girls, then follow a ribbon left to right to see a team climb or slide.</p>
     <p class="meta" id="meta"></p>
@@ -282,7 +288,7 @@ function build(g){
 
   d3.select('#foot').html(
     `Vertical position = the team's rank by cumulative time at that point in the race (1 = fastest, top). Ribbon color encodes net movement from the Leg&nbsp;1 order to the finish. `+
-    `Only the ${N} ${gender} teams that fielded four finishers are shown; incomplete and DNF relays are excluded. Built with D3.js. Source: 2026 Knight Night Relays official splits, Preston High School.`);
+    `Only the ${N} ${gender} teams that fielded four finishers are shown; incomplete and DNF relays are excluded. Built with D3.js. Results timing by <a href="https://mountaintiming.com" target="_blank" rel="noopener" style="color:var(--sec);text-decoration:underline">mountaintiming.com</a> · 2026 Knight Night Relays, Preston High School.`);
 
   applyFilter();
 }
