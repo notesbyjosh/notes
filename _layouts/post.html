@@ -1,16 +1,4 @@
 ---
 layout: default
 ---
-<section class="timeline">
-  <article class="entry" data-tags="{{ page.tags | join: ' ' | downcase }}">
-    <div class="entry-date">{{ page.date | date: "%b %-d, %Y" }}</div>
-    <h2 class="entry-title">{{ page.title }}</h2>
-    <div class="entry-body">{{ content }}</div>
-    {%- if page.tags.size > 0 %}
-    <div class="entry-tags">
-      {%- for t in page.tags %}<a class="entry-tag" href="{{ '/' | relative_url }}#tag={{ t | downcase }}">#{{ t }}</a>{% endfor %}
-    </div>
-    {%- endif %}
-    <p class="backlink"><a href="{{ '/' | relative_url }}">← All learnings</a></p>
-  </article>
-</section>
+<article class="article-page"><header class="article-heading"><a class="backlink" href="{{ '/notebook/' | relative_url }}">← Back to notes</a><p class="eyebrow">{{ page.date | date: '%B %-d, %Y' }}</p><h1>{{ page.title }}</h1><div class="entry-tags">{% for tag in page.tags %}<a class="entry-tag" href="{{ '/notebook/' | relative_url }}#tag={{ tag | uri_escape }}">{{ tag }}</a>{% endfor %}</div></header><div class="entry-body prose">{{ content }}</div><div class="article-end"><a href="{{ '/notebook/' | relative_url }}">← All notes</a><a href="{{ '/work/' | relative_url }}">Explore more work ↗</a></div></article>

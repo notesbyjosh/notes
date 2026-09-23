@@ -1,0 +1,4 @@
+<article class="project-card">
+  <a class="project-image" href="{{ project.url | relative_url }}" tabindex="-1" aria-hidden="true"><img src="{{ project.image | relative_url }}" alt="" loading="lazy" width="720" height="450"></a>
+  <div class="project-copy"><p class="eyebrow">{{ project.category }}</p><h3><a href="{{ project.url | relative_url }}">{{ project.title }}</a></h3><p>{{ project.description }}</p><div class="project-links"><a href="{{ project.url | relative_url }}">{{ project.label }} <span aria-hidden="true">↗</span></a>{% if project.demo %}<a href="{{ project.demo | relative_url }}">Live demo ↗</a>{% endif %}</div></div>
+</article>

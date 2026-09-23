@@ -1,26 +1,13 @@
 ---
 layout: default
 ---
-{%- assign daygroups = site.posts | group_by_exp: "p", "p.date | date: '%Y-%m-%d'" -%}
-<section class="stats" aria-live="polite">
-  <div class="stat"><span class="num">{{ site.posts.size }}</span><span class="lbl">Learnings</span></div>
-  <div class="stat"><span class="num">{{ site.tags.size }}</span><span class="lbl">Topics</span></div>
-  <div class="stat"><span class="num">{{ daygroups.size }}</span><span class="lbl">Days logged</span></div>
+<section class="hero">
+  <p class="eyebrow">THE PORTFOLIO & NOTEBOOK OF JOSH</p>
+  <h1>Making data useful.<br><span>Making ideas real.</span></h1>
+  <div class="hero-bottom"><p>I build with Azure, Microsoft Fabric, and AI—and turn data into interactive stories. This is where I share the projects, experiments, and lessons along the way.</p><a class="button" href="{{ '/work/' | relative_url }}">Explore my work <span aria-hidden="true">↗</span></a></div>
+  <div class="hero-topics"><span>Data & analytics</span><span>AI applications</span><span>Interactive visualization</span></div>
 </section>
-
-<section class="timeline">
-  {%- for post in site.posts %}
-  <article class="entry" data-tags="{{ post.tags | join: ' ' | downcase }}">
-    <div class="entry-date">{{ post.date | date: "%b %-d, %Y" }}</div>
-    <h2 class="entry-title"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
-    <div class="entry-body">{{ post.content }}</div>
-    {%- if post.tags.size > 0 %}
-    <div class="entry-tags">
-      {%- for t in post.tags %}<button class="entry-tag" data-tag="{{ t | downcase }}">#{{ t }}</button>{% endfor %}
-    </div>
-    {%- endif %}
-  </article>
-  {%- endfor %}
-</section>
-
-<p id="empty" class="empty" hidden>No learnings match your filter.</p>
+<section class="section" aria-labelledby="selected"><div class="section-heading"><div><p class="eyebrow">01 / SELECTED WORK</p><h2 id="selected">Built to be explored.</h2></div><a href="{{ '/work/' | relative_url }}">All projects ↗</a></div><div class="project-grid">{% for project in site.data.projects %}{% if project.featured %}{% include project-card.html %}{% endif %}{% endfor %}</div></section>
+<section class="practice section"><div><p class="eyebrow">02 / WHAT CONNECTS THE WORK</p><h2>Curiosity, with<br>something to show for it.</h2></div><div><p>From connecting an AI agent to SQL, to mapping decades of running history, I like exploring what happens when data becomes something you can use.</p><p>The finished project is only part of the story. I also write down the decisions, dead ends, and fixes that make the next build better.</p><a href="{{ '/about/' | relative_url }}">A little more about me ↗</a></div></section>
+<section class="section" aria-labelledby="latest"><div class="section-heading"><div><p class="eyebrow">03 / FROM THE NOTEBOOK</p><h2 id="latest">What I’m learning.</h2></div><a href="{{ '/notebook/' | relative_url }}">All notes ↗</a></div><div class="recent-notes">{% for post in site.posts limit:3 %}<article class="note-row"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%b %d, %Y' }}</time><h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3><span aria-hidden="true">↗</span></article>{% endfor %}</div></section>
+<section class="contact-strip"><div><p class="eyebrow">KEEP EXPLORING</p><h2>See what’s behind the work.</h2></div><a class="button secondary" href="https://github.com/notesbyjosh">Find me on GitHub ↗</a></section>

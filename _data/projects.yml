@@ -1,0 +1,47 @@
+- title: A sales agent, beyond the playground
+  category: AI & CLOUD
+  description: Bringing a Foundry agent to the web with SQL tools, managed identity, and lessons from the bugs along the way.
+  image: /assets/images/foundry-sales-agent.png
+  alt: Architecture of the Foundry sales agent and SQL MCP server
+  url: /learnings/foundry-agent-web-app/
+  label: Read the build story
+  featured: true
+- title: West Virginia, on the run
+  category: INTERACTIVE DATA
+  description: An interactive map tracing 68 seasons of cross-country team championships across West Virginia.
+  image: /assets/images/wv-cross-country-feed.png
+  alt: Map of West Virginia cross-country championship teams
+  url: /learnings/wv-cross-country-team-champions/
+  demo: /viz/wv-cross-country-team-champions.html
+  label: Explore the project
+  featured: true
+- title: Every leg changes the race
+  category: INTERACTIVE DATA
+  description: Follow the rise and fall of teams at the Knight Night Relays with an animated ribbon chart and split heatmap.
+  image: /assets/images/knight-night-preview.png
+  alt: Ribbon chart showing team ranks across the four relay legs
+  url: /learnings/knight-night-relays-ribbons/
+  demo: /viz/knight-night-ribbons.html
+  label: Explore the project
+  featured: true
+- title: One dataset. Two paths to prediction.
+  category: FABRIC & MACHINE LEARNING
+  description: Building with the Titanic dataset in Azure ML and Microsoft Fabric, from OneLake to predictions in Power BI.
+  image: /assets/images/azureml-fabric-titanic-architecture.png
+  alt: Azure ML and Fabric machine learning architecture
+  url: /learnings/azure-ml-and-fabric-titanic-two-ways/
+  label: Read the build story
+- title: From database change to shipping update
+  category: DATA & AI
+  description: Connecting SQL Server change events, Event Hubs, and a Foundry agent to a live shipping page.
+  image: /assets/images/contoso-ces-architecture.png
+  alt: Architecture connecting SQL change events with a Foundry agent
+  url: /learnings/sql-2025-change-event-streaming-to-foundry/
+  label: Read the build story
+- title: Giving an agent business context
+  category: FABRIC & AI
+  description: Connecting a Fabric IQ ontology to a Foundry agent over MCP, with the design constraints and lessons documented.
+  image: /assets/images/ontology-agent-architecture.png
+  alt: Fabric ontology and Foundry agent architecture
+  url: /learnings/fabric-ontology-foundry-agent-mcp/
+  label: Read the build story

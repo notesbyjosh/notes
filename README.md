@@ -1,58 +1,52 @@
-# AI Learning Log — Jekyll version
+# Notes by Josh
 
-A Jekyll port of my AI learning log. Same look as the static version, but each
-learning is authored as a **Markdown file** and GitHub Pages builds the HTML
-server-side on every push.
+A Jekyll portfolio and searchable notebook, published through GitHub Pages.
 
-## Add a learning
+## Pages
 
-Create a file in `_posts/` named `YYYY-MM-DD-some-title.md`:
+- `/`: introduction, three featured projects, and recent notes.
+- `/work/`: selected projects with links to their build stories and demos.
+- `/notebook/`: all notes, with full-text search and topic filtering.
+- `/about/`: background and links to GitHub.
+- `/learnings/:title/`: existing article URLs, preserved during the redesign.
 
-```markdown
+All paths above are relative to the configured `/notes` base URL. Existing visualization and timeline URLs are unchanged. Old homepage bookmarks such as `/notes/#tag=rag` forward to the notebook filter.
+
+## Add a note
+
+Create `_posts/YYYY-MM-DD-short-title.md` with front matter:
+
+```yaml
 ---
 layout: post
-title: "Short, punchy title"
-tags: [llm, rag]
+title: "What I learned"
+tags: [fabric, ai]
 ---
-
-What I learned, in **Markdown**. Code blocks, lists, links — all supported.
-
-```python
-print("even fenced code blocks just work")
-```
 ```
 
-Commit and push — GitHub Pages rebuilds the site in about a minute.
+Write the article in Markdown beneath it. An optional `description` supplies the notebook preview; otherwise the first paragraph is used. Search includes the full article, not only the preview.
 
-## How it differs from the static version
+## Add or feature a project
 
-| | Static (JSON) | Jekyll |
-|---|---|---|
-| Author a learning | Edit `entries.json` | Add a Markdown file in `_posts/` |
-| Rendering | Browser fetches JSON via JS | Pre-rendered HTML at build time |
-| Per-entry permalink | No | Yes (`/learnings/<title>/`) |
-| RSS feed | No | Yes (`/feed.xml` via jekyll-feed) |
-| Local preview | Open the file | `bundle exec jekyll serve` (needs Ruby) |
+Edit `_data/projects.yml`. Each item has `title`, `category`, `description`, `image`, `url`, and `label`. Add `demo` for a live demo link and `featured: true` to show it on the homepage. Keep three featured projects for the intended desktop layout. Project `url` can point to an existing build story. Store preview images in `assets/images/`.
 
-## Structure
+## Design and content
 
-| Path | Purpose |
-|------|---------|
-| `_config.yml` | Site settings (title, baseurl, plugins) |
-| `_layouts/default.html` | Shared shell: masthead, search, tag bar, footer |
-| `_layouts/post.html` | Single-learning permalink page |
-| `index.html` | Home — loops posts into the timeline + stats |
-| `_posts/*.md` | **Your content** — one Markdown file per learning |
-| `assets/style.css` | Styling (light + dark) |
-| `assets/app.js` | Theme toggle, search, tag filtering |
-| `Gemfile` | Gem set matching GitHub Pages (for local dev) |
+- `_layouts/default.html`: shared header, navigation, theme control, and footer.
+- `_layouts/post.html`: article layout.
+- `_includes/project-card.html`: reusable project card.
+- `index.html`, `work/index.html`, `notebook/index.html`, `about/index.html`: page content.
+- `assets/style.css`: responsive light and dark themes.
+- `assets/app.js`: theme persistence, notebook filtering, and legacy tag links.
+- `_config.yml`: title, description, site URL, and base URL.
 
-## Local preview (optional)
+## Preview and publish
 
-Requires Ruby + Bundler:
+Use a Ruby version compatible with the GitHub Pages gem bundle:
 
-```bash
+```sh
 bundle install
 bundle exec jekyll serve
-# http://localhost:4000/ai-learning-log/
 ```
+
+Open `http://localhost:4000/notes/`. Push to `main` to publish through GitHub Pages.
