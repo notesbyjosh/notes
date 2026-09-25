@@ -24,6 +24,14 @@
   demo: /viz/knight-night-ribbons.html
   label: Explore the project
   featured: true
+- title: It's the pack that scores
+  category: INTERACTIVE DATA
+  description: Box-and-whisker plots of the ten North Region girls' cross country teams, showing how tightly each top five runs together.
+  image: /assets/images/north-region-pack-spread.png
+  alt: Box plots of North Region girls cross country teams by runner rank
+  url: /learnings/north-region-pack-spread/
+  demo: /viz/north-region-pack-spread.html
+  label: Explore the project
 - title: One dataset. Two paths to prediction.
   category: FABRIC & MACHINE LEARNING
   description: Building with the Titanic dataset in Azure ML and Microsoft Fabric, from OneLake to predictions in Power BI.
